@@ -43,7 +43,7 @@ export default function WrappedCard() {
     <>
       <Card
         ref={cardRef}
-        className="w-[60vw] p-8 bg-gradient-to-br from-purple-900  to-pink-400 text-white border-none"
+        className="w-[80vw] md:w-[70vw] p-8 bg-gradient-to-br from-purple-900  to-pink-400 text-white border-none"
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -54,7 +54,7 @@ export default function WrappedCard() {
             Notion Wrapped 2024
           </h1>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="p-4 bg-black/20 rounded-lg">
               <h3 className="text-lg font-semibold">Streak</h3>
               <p className="text-2xl font-bold">42 days</p>

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNotionAuth } from "@/hooks/use-notion-auth";
 import WrappedCard from "./wrapped/WrappedCard";
+import Link from "next/link";
 
 export function Landing() {
   const { handleAuth } = useNotionAuth();
@@ -94,6 +95,21 @@ export function Landing() {
           <WrappedCard />
         </Card>
       </motion.div>
+      <div className="pb-16 text-gray-300 flex flex-col items-center gap-2 ">
+        <a
+          href="https://notionwrapped.features.vote/board"
+          target="_blank"
+          className="hover:underline hover:text-gray-100"
+        >
+          Request a feature ⚡️ or report a bug 🐛
+        </a>
+        <Link
+          href="/privacy-policy"
+          className="hover:underline hover:text-gray-100"
+        >
+          Privacy Policy 🔒
+        </Link>
+      </div>
     </motion.div>
   );
 }

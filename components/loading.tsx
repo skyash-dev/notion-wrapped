@@ -8,7 +8,7 @@ export function Loading() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="flex items-center justify-center h-screen"
+      className="flex items-center justify-center h-[90vh]"
     >
       <Card className="w-full max-w-md p-8 bg-black/40 backdrop-blur-xl border-gray-800">
         <div className="space-y-6">
