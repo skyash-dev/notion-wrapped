@@ -8,11 +8,13 @@ export async function GET(request: Request) {
   const error = searchParams.get("error");
 
   if (error) {
-    return NextResponse.redirect("http://localhost:3000/error?error=" + error);
+    return NextResponse.redirect(
+      `${process.env.BASE_URL}/error?error=` + error
+    );
   }
 
   if (!code) {
-    return NextResponse.redirect("http://localhost:3000/error?error=no_code");
+    return NextResponse.redirect(`${process.env.BASE_URL}/error?error=no_code`);
   }
 
   try {
@@ -24,12 +26,12 @@ export async function GET(request: Request) {
     // For this demo, we'll use localStorage (not recommended for production)
 
     return NextResponse.redirect(
-      "http://localhost:3000/?token=" + tokenData.access_token
+      `${process.env.BASE_URL}/?token=` + tokenData.access_token
     );
   } catch (error) {
     console.error("Error exchanging code for token:", error);
     return NextResponse.redirect(
-      "http://localhost:3000/error?error=token_exchange_failed"
+      `${process.env.BASE_URL}/error?error=token_exchange_failed`
     );
   }
 }
