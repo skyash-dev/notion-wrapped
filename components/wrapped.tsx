@@ -1,35 +1,38 @@
-// @ts-ignore
-"use client";
-
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Music2Icon, VolumeXIcon } from "lucide-react";
-import WrappedExperience from "@/components/wrapped/WrappedExperience";
-import { Loading } from "./loading";
-import { ErrorCard } from "./error";
-import { SlidesType } from "@/lib/landing-slide-data";
+import { Music2Icon, VolumeXIcon, PlayIcon } from "lucide-react";
+import WrappedCard, { NotionData } from "./wrapped/WrappedCard";
 
-type NotionData = {
-  streak: number;
-  pagesCreated: number;
-  universalRank: number;
-  mostActiveMonth: string;
-  // topPages,
-  minutesOfNotes: number;
-  // longestNote,
-  mostActiveHour: string;
-  personalityCard: string;
-};
+import { YearSlide } from "@/components/wrapped/YearSlide";
+import { ProfileSlide } from "@/components/wrapped/ProfileSlide";
+import { StreakSlide } from "@/components/wrapped/StreakSlide";
+import { NotesSlide } from "@/components/wrapped/NotesSlide";
+import { ProductivitySlide } from "@/components/wrapped/ProductivitySlide";
+import { ProductiveDaySlide } from "@/components/wrapped/ProductiveDaySlide";
+import { DatabasesSlide } from "@/components/wrapped/DatabasesSlide";
+import { TopTemplatesSlide } from "@/components/wrapped/TopTemplatesSlide";
+import { StatsSlide } from "@/components/wrapped/StatsSlide";
+import { PersonalitySlide } from "@/components/wrapped/PersonalitySlide";
+import { ErrorCard } from "./error";
+import { Loading } from "./loading";
+
+const SLIDE_DURATION = 4000; // 4 seconds per slide
 
 export function Wrapped() {
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [showWrappedCard, setShowWrappedCard] = useState(false);
 
   const [notionData, setNotionData] = useState<NotionData>();
   const [error, setError] = useState<string | null>(null);
 
-  const audioRef = useRef<any>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Fetch Notion data on mount
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("notion_token");
@@ -50,146 +53,122 @@ export function Wrapped() {
         setError(err.message);
       }
     };
-    // let notionDataString: any = localStorage.getItem("notion_data");
-    // let parsedNotionData = JSON.parse(notionDataString);
-
-    // if (parsedNotionData) {
-    //   setNotionData(parsedNotionData);
-    // } else {
-    //   fetchData();
-    // }
     fetchData();
   }, []);
 
-  // useEffect(() => {
-  //   if (notionData) {
-  //     localStorage.setItem("notion_data", JSON.stringify(slides));
-  //   }
-  // }, [notionData]);
+  // Slide progression logic
+  useEffect(() => {
+    if (hasInteracted && !showWrappedCard && timerRef.current === null) {
+      timerRef.current = setInterval(() => {
+        setCurrentSlide((prev) => {
+          if (prev < slides.length - 1) {
+            return prev + 1;
+          } else {
+            clearInterval(timerRef.current!);
+            timerRef.current = null;
+            setShowWrappedCard(true);
+            return prev;
+          }
+        });
+      }, SLIDE_DURATION);
+    }
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [hasInteracted, showWrappedCard]);
+
+  // Handle audio play/pause
+  useEffect(() => {
+    if (isMuted) {
+      audioRef.current?.pause();
+    } else {
+      audioRef.current?.play();
+    }
+  }, [isMuted]);
 
   if (error) return <ErrorCard />;
   if (!notionData) return <Loading />;
 
   localStorage.removeItem("notion_token");
-  function getStreakDescription(streak: number): string {
-    if (streak > 100)
-      return `Legendary streak! You've been active for ${streak} days straight. 🔥`;
-    if (streak > 30)
-      return `Consistency is key! ${streak} days of non-stop Notion mastery. 💪`;
-    return `You're off to a great start with a ${streak}-day streak! Keep it going! 🚀`;
-  }
 
-  function getPagesCreatedDescription(pagesCreated: number): string {
-    if (pagesCreated > 500)
-      return `Content powerhouse! You've created ${pagesCreated} pages this year. 📝`;
-    if (pagesCreated > 100)
-      return `Impressive! ${pagesCreated} pages were added to your Notion universe. 🌟`;
-    return `You crafted ${pagesCreated} pages—each one a building block of creativity. ✨`;
-  }
-
-  function getUniversalRankDescription(universalRank: number): string {
-    if (universalRank <= 1)
-      return `You're in the top 1% of Notion users worldwide. You're a star! 🌟`;
-    if (universalRank <= 10)
-      return `Top ${universalRank}% globally! Your productivity is unmatched. 🌍`;
-    return `Your universal rank is ${universalRank}%—keep climbing to the top! 🔝`;
-  }
-
-  function getMostActiveMonthDescription(month: string): string {
-    return `${month} was your standout month. You were unstoppable that month! 📅`;
-  }
-
-  function getMinutesOfNotesDescription(minutes: number): string {
-    const hours = Math.floor(minutes / 60);
-    if (hours > 50)
-      return `You spent over ${hours} hours on notes! Incredible dedication. 🕒`;
-    if (hours > 20)
-      return `More than ${hours} hours of focus! Notion is your second home. 🏡`;
-    return `${hours} hours of notes taken—your journey is just getting started! 🚀`;
-  }
-
-  function getMostActiveHourDescription(hour: string): string {
-    return `Your peak productivity happens at ${hour}. It's your golden hour! 🌟`;
-  }
-
-  function getPersonalityDescription(personalityCard: string): string {
-    switch (personalityCard) {
-      case "Visionary":
-        return "You're a dreamer who turns ideas into action. 🚀";
-      case "Night Owl":
-        return "You thrive in the quiet hours of the night. 🌙";
-      case "Early Bird":
-        return "The morning light fuels your creativity. ☀️";
-      case "Task Master":
-        return "Efficiency is your superpower—you get things done! 💼";
-      case "Creative Thinker":
-        return "Imagination is your playground. You bring ideas to life. 🎨";
-      default:
-        return "You're a unique blend of creativity, focus, and productivity. 🌈";
-    }
-  }
-
-  // Slides data generation
-  const slides: SlidesType = [
-    {
-      title: "Your Notion Streak",
-      value: notionData.streak.toString(),
-      description: getStreakDescription(notionData.streak),
-    },
-    {
-      title: "Pages Created",
-      value: notionData.pagesCreated.toString(),
-      description: getPagesCreatedDescription(notionData.pagesCreated),
-    },
-    {
-      title: "Universal Rank",
-      value: notionData.universalRank.toString(),
-      description: getUniversalRankDescription(notionData.universalRank),
-    },
-    {
-      title: "Most Active Month",
-      value: notionData.mostActiveMonth,
-      description: getMostActiveMonthDescription(notionData.mostActiveMonth),
-    },
-    {
-      title: "Time Spent Taking Notes",
-      value: `${notionData.minutesOfNotes} min`,
-      description: getMinutesOfNotesDescription(notionData.minutesOfNotes),
-    },
-    {
-      title: "Peak Productivity Hour",
-      value: notionData.mostActiveHour,
-      description: getMostActiveHourDescription(notionData.mostActiveHour),
-    },
-    {
-      title: "Your Notion Personality",
-      value: notionData.personalityCard,
-      description: getPersonalityDescription(notionData.personalityCard),
-    },
+  const slides = [
+    { component: YearSlide, props: { notionData } },
+    { component: ProfileSlide, props: { notionData } },
+    { component: StreakSlide, props: { notionData } },
+    { component: NotesSlide, props: { notionData } },
+    { component: ProductivitySlide, props: { notionData } },
+    { component: ProductiveDaySlide, props: { notionData } },
+    { component: DatabasesSlide, props: { notionData } },
+    { component: TopTemplatesSlide, props: { notionData } },
+    { component: StatsSlide, props: { notionData } },
+    { component: PersonalitySlide, props: { notionData } },
   ];
 
-  return (
-    <div className="">
-      {/* Main Wrapped Content */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="flex items-center justify-center"
-      >
-        {/* <Card className="w-3/4 m-2 bg-black/40 backdrop-blur-xl border-gray-800 p-2"> */}
-        <div className="h-screen flex items-center justify-center">
-          <WrappedExperience slides={slides} />
-        </div>
-        {/* </Card> */}
-      </motion.div>
+  const CurrentSlideComponent = slides[currentSlide].component;
 
-      {/* Music Control */}
-      <audio
-        src="/background-music.mp3"
-        ref={audioRef}
-        autoPlay
-        autoFocus
-      ></audio>
+  if (showWrappedCard) {
+    return (
+      <div className="flex justify-center items-center flex-col p-4">
+        <WrappedCard notionData={notionData} />
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div className="flex items-center justify-center p-2">
+        <div className="h-[95vh] w-[30vw] aspect-[9/16] relative">
+          {!hasInteracted && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 rounded-2xl"
+            >
+              <Button
+                onClick={() => {
+                  setHasInteracted(true);
+                  setIsMuted(false);
+                }}
+                className="bg-[#191919] hover:bg-[rgba(31,31,31,1)] hover:text-white border-[1px] border-gray-400 hover:border-gray-200 text-gray-200 font-bold px-6 py-3 rounded-full flex items-center gap-2"
+              >
+                <PlayIcon className="w-5 h-5" />
+                Click to Start!
+              </Button>
+            </motion.div>
+          )}
+          {/* Slide Container */}
+          <motion.div
+            className="w-full h-full bg-[rgba(44,44,44,1)] rounded-2xl overflow-hidden"
+            initial={{ padding: 0 }}
+            animate={{ padding: "0.3rem" }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+          >
+            <div className="w-full h-full bg-[#191919] rounded-xl overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentSlide}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.5 }}
+                  className="w-full h-full"
+                >
+                  <CurrentSlideComponent
+                    notionData={slides[currentSlide].props.notionData}
+                  />
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Audio Control */}
+      <audio src="/background-music.mp3" ref={audioRef} autoPlay />
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -201,11 +180,6 @@ export function Wrapped() {
           size="icon"
           onClick={() => {
             setIsMuted(!isMuted);
-            if (!isMuted) {
-              audioRef.current?.pause();
-            } else {
-              audioRef.current?.play();
-            }
           }}
           className="bg-black/40 backdrop-blur-xl border-gray-800"
         >
@@ -216,6 +190,8 @@ export function Wrapped() {
           )}
         </Button>
       </motion.div>
-    </div>
+    </>
   );
 }
+
+export default Wrapped;

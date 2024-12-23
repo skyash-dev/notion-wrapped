@@ -7,7 +7,20 @@ import { Card } from "@/components/ui/card";
 import { useRef } from "react";
 import { toPng } from "html-to-image";
 
-export default function WrappedCard() {
+import React from "react";
+import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
+
+export type NotionData = {
+  streak: number;
+  pagesCreated: number;
+  universalRank: string;
+  mostActiveMonth: string;
+  minutesOfNotes: number;
+  mostActiveHour: string;
+  personalityCard: string;
+};
+
+export default function WrappedCard(props: { notionData: NotionData }) {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleDownload = async () => {
@@ -39,11 +52,207 @@ export default function WrappedCard() {
     }
   };
 
+  const items = [
+    // Streak
+    {
+      header: (
+        <div className="flex-1 flex-col gap-10 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center">
+          <motion.h2
+            className="text-6xl origin-bottom"
+            animate={{
+              scale: [1, 1.1, 1],
+              rotate: [-5, 5, -5],
+              y: [0, -5, 0],
+            }}
+            transition={{
+              duration: 2.25,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            🔥
+          </motion.h2>
+          <div className="mx-4">
+            <h3 className="font-bold text-2xl py-2">
+              {props.notionData.streak} Days
+            </h3>
+            <p className="text-gray-300">in a row, you&apos;re on fire!</p>
+          </div>
+        </div>
+      ),
+    },
+
+    // Pages Created
+    {
+      header: (
+        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center">
+          <motion.div
+            className="text-6xl"
+            animate={{
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 0.8,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            📄
+          </motion.div>
+          <div className="mx-4">
+            <h3 className="font-bold text-2xl py-2">
+              {props.notionData.pagesCreated} Pages
+            </h3>
+            <p className="text-gray-300">created — a creator in action!</p>
+          </div>
+        </div>
+      ),
+    },
+
+    // Universal Rank
+    {
+      header: (
+        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center">
+          <motion.div
+            className="text-6xl"
+            animate={{
+              rotate: [0, 15, -15, 0],
+            }}
+            transition={{
+              duration: 2.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            🏆
+          </motion.div>
+          <div className="mx-4">
+            <h3 className="font-bold text-2xl py-2">
+              {props.notionData.universalRank}
+            </h3>
+            <p className="text-gray-300">
+              Rising through the ranks like a star!
+            </p>
+          </div>
+        </div>
+      ),
+    },
+
+    // Most Active Month
+    {
+      header: (
+        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center">
+          <motion.div
+            className="text-6xl"
+            animate={{
+              y: [0, -10, 0],
+            }}
+            transition={{
+              duration: 2.2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            📅
+          </motion.div>
+          <div className="mx-4">
+            <h3 className="font-bold text-2xl py-2">
+              {props.notionData.mostActiveMonth}
+            </h3>
+            <p className="text-gray-300">was your most productive month!</p>
+          </div>
+        </div>
+      ),
+    },
+
+    // Minutes of Notes
+    {
+      header: (
+        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center">
+          <motion.div
+            className="text-6xl"
+            animate={{
+              scale: [1, 0.9, 1],
+            }}
+            transition={{
+              duration: 2.2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            🗒️
+          </motion.div>
+          <div className="mx-4">
+            <h3 className="font-bold text-2xl py-2">
+              {props.notionData.minutesOfNotes} Minutes
+            </h3>
+            <p className="text-gray-300">spent taking notes of brilliance.</p>
+          </div>
+        </div>
+      ),
+    },
+
+    // Most Active Hour
+    {
+      header: (
+        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center">
+          <motion.div
+            className="text-6xl"
+            animate={{
+              rotate: [0, 10, -10, 0],
+            }}
+            transition={{
+              duration: 2.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            ⏰
+          </motion.div>
+          <div className="mx-4">
+            <h3 className="font-bold text-2xl py-2">
+              {props.notionData.mostActiveHour}
+            </h3>
+            <p className="text-gray-300">was your magic hour!</p>
+          </div>
+        </div>
+      ),
+    },
+
+    // Personality Card
+    {
+      header: (
+        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center">
+          <motion.div
+            className="text-6xl"
+            animate={{
+              scale: [1, 1.2, 1],
+              rotate: [0, 360],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            🎴
+          </motion.div>
+          <div className="mx-4">
+            <h3 className="font-bold text-2xl py-2">
+              {props.notionData.personalityCard}
+            </h3>
+            <p className="text-gray-300">Harmony of creativity and logic!</p>
+          </div>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <>
       <Card
         ref={cardRef}
-        className="w-[80vw] md:w-[70vw] p-8 bg-gradient-to-br from-purple-900  to-pink-400 text-white border-none"
+        className="w-[80vw] md:w-[70vw] p-8 bg-[#191919] text-white border-none"
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -54,37 +263,15 @@ export default function WrappedCard() {
             Notion Wrapped 2024
           </h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4 bg-black/20 rounded-lg">
-              <h3 className="text-lg font-semibold">Streak</h3>
-              <p className="text-2xl font-bold">42 days</p>
-            </div>
-            <div className="p-4 bg-black/20 rounded-lg">
-              <h3 className="text-lg font-semibold">Pages Created</h3>
-              <p className="text-2xl font-bold">156</p>
-            </div>
-            <div className="p-4 bg-black/20 rounded-lg">
-              <h3 className="text-lg font-semibold">Universal Rank</h3>
-              <p className="text-2xl font-bold">Top 5%</p>
-            </div>
-            <div className="p-4 bg-black/20 rounded-lg">
-              <h3 className="text-lg font-semibold">Most Active Month</h3>
-              <p className="text-2xl font-bold">March</p>
-            </div>
-            <div className="p-4 bg-black/20 rounded-lg">
-              <h3 className="text-lg font-semibold">Minutes of Notes</h3>
-              <p className="text-2xl font-bold">2,450</p>
-            </div>
-            <div className="p-4 bg-black/20 rounded-lg">
-              <h3 className="text-lg font-semibold">Most Active Hour</h3>
-              <p className="text-2xl font-bold">10 AM</p>
-            </div>
-          </div>
-
-          <div className="p-4 bg-black/20 rounded-lg mt-4">
-            <h3 className="text-lg font-semibold mb-2">Personality</h3>
-            <p className="text-2xl font-bold">The Night Owl Creator</p>
-          </div>
+          <BentoGrid className="max-w-4xl mx-auto">
+            {items.map((item, i) => (
+              <BentoGridItem
+                key={i}
+                header={item.header}
+                className={`${i === 3 || i === 6 ? "md:col-span-2" : ""}`}
+              />
+            ))}
+          </BentoGrid>
         </motion.div>
       </Card>
       <div className="flex gap-4 justify-center mt-8">

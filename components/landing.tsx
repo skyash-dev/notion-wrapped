@@ -8,6 +8,16 @@ import { useNotionAuth } from "@/hooks/use-notion-auth";
 import WrappedCard from "./wrapped/WrappedCard";
 import Link from "next/link";
 
+let defaultNotionData = {
+  streak: 69,
+  pagesCreated: 24,
+  universalRank: "Notion Ninja",
+  mostActiveMonth: "July",
+  minutesOfNotes: 1540,
+  mostActiveHour: "11:00 PM",
+  personalityCard: "Balanced Thinker",
+};
+
 export function Landing() {
   const { handleAuth } = useNotionAuth();
 
@@ -91,8 +101,8 @@ export function Landing() {
             <ArrowDown className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer" />
           </div>
         </motion.h2>
-        <Card className="p-4 bg-black/20 backdrop-blur-xl border-gray-800 transform transition-transform">
-          <WrappedCard />
+        <Card className="pb-4 bg-black/20 backdrop-blur-xl border-gray-800 transform transition-transform">
+          <WrappedCard notionData={defaultNotionData} />
         </Card>
       </motion.div>
       <div className="pb-16 text-gray-300 flex flex-col items-center gap-2 ">
