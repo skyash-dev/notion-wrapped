@@ -3,12 +3,6 @@
 import { motion } from "framer-motion";
 import { NotionData } from "./WrappedCard";
 
-const templates = [
-  { name: "Daily Journal", usage: "127 times" },
-  { name: "Project Tracker", usage: "89 times" },
-  { name: "Meeting Notes", usage: "64 times" },
-];
-
 export const TopTemplatesSlide = (props: { notionData: NotionData }) => {
   return (
     <div className="relative h-screen w-full bg-[#191919] flex items-center justify-center overflow-hidden">
@@ -30,7 +24,7 @@ export const TopTemplatesSlide = (props: { notionData: NotionData }) => {
           </h2>
 
           <div className="flex flex-col gap-4">
-            {templates.map((template, index) => (
+            {props.notionData.templates.map((template, index) => (
               <motion.div
                 key={template.name}
                 initial={{ opacity: 0, x: -50 }}

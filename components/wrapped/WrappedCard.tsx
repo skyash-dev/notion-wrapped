@@ -9,6 +9,7 @@ import { toPng } from "html-to-image";
 
 import React from "react";
 import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
+import { Avatar, AvatarImage } from "../ui/avatar";
 
 export type NotionData = {
   streak: number;
@@ -18,6 +19,10 @@ export type NotionData = {
   minutesOfNotes: number;
   mostActiveHour: string;
   personalityCard: string;
+  databaseCount: number;
+  mostProductiveDay: { productiveDay: string; highestAverage: number };
+  userData: { name: string; avatarUrl: string };
+  templates: Array<{ name: string; usage: number }>;
 };
 
 export default function WrappedCard(props: { notionData: NotionData }) {
@@ -252,16 +257,30 @@ export default function WrappedCard(props: { notionData: NotionData }) {
     <>
       <Card
         ref={cardRef}
-        className="w-[90vw] sm:w-[80vw] md:w-[70vw] p-8 bg-[#191919] text-white border-none"
+        className="w-[90vw] sm:w-[80vw] md:w-[70vw] p-6 bg-[#191919] text-white border-none"
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="space-y-3"
         >
-          <h1 className="text-2xl font-bold text-center mb-8">
+          {/* <h1 className="text-2xl font-bold text-center mb-8">
             Notion Wrapped 2024
-          </h1>
+          </h1> */}
+          <div className="flex justify-center items-center gap-3 py-6">
+            <Avatar className="h-16 w-16">
+              <AvatarImage
+                src={props.notionData.userData.avatarUrl}
+                className=""
+              />
+            </Avatar>
+            <span>
+              <p className="text-xl font-bold">
+                {props.notionData.userData.name}
+              </p>
+              <p className="text-sm text-gray-200">2024 Year in Notes</p>
+            </span>
+          </div>
 
           <BentoGrid className="max-w-4xl mx-auto">
             {items.map((item, i) => (

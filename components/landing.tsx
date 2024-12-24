@@ -16,6 +16,18 @@ let defaultNotionData = {
   minutesOfNotes: 1540,
   mostActiveHour: "11:00 PM",
   personalityCard: "Balanced Thinker",
+  userData: {
+    avatarUrl:
+      "https://pbs.twimg.com/profile_images/1667022736965906432/NEPFucvw_400x400.jpg",
+    name: "skyash",
+  },
+  databaseCount: 0,
+  mostProductiveDay: { productiveDay: "Tuesday", highestAverage: 12 },
+  templates: [
+    { name: "Daily Journal", usage: 127 },
+    { name: "Project Tracker", usage: 89 },
+    { name: "Meeting Notes", usage: 64 },
+  ],
 };
 
 export function Landing() {

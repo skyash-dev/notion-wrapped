@@ -234,3 +234,153 @@ export function getPersonalityCard(
   if (mostActiveHour > 18) return "Night Owl";
   return "Balanced Thinker";
 }
+
+export async function getTotalDatabasesCreated(notionClient: Client) {
+  const today = new Date();
+  const oneYearAgo = new Date(
+    today.getFullYear() - 1,
+    today.getMonth(),
+    today.getDate()
+  );
+
+  // Search for all databases in the Notion workspace
+  const response = await notionClient.search({
+    filter: { property: "object", value: "database" },
+    sort: { direction: "ascending", timestamp: "last_edited_time" },
+    query: "", // search all databases
+  });
+
+  // Filter databases created within the last year
+  const databases = response.results.filter((database: any) => {
+    const createdTime = new Date(database.created_time);
+    return createdTime >= oneYearAgo && createdTime <= today;
+  });
+
+  // Count and group by creation date
+  const databaseCount = databases.length;
+
+  return databaseCount;
+}
+
+export async function getMostProductiveDayOfWeek(notionClient: Client) {
+  const today = new Date();
+  const oneYearAgo = new Date(
+    today.getFullYear() - 1,
+    today.getMonth(),
+    today.getDate()
+  );
+
+  const response = await notionClient.search({
+    filter: { property: "object", value: "page" },
+    sort: { direction: "ascending", timestamp: "last_edited_time" },
+    query: "", // search all pages
+  });
+
+  const pages = response.results.filter((page: any) => {
+    const createdTime = new Date(page.created_time);
+    return createdTime >= oneYearAgo && createdTime <= today;
+  });
+
+  // Initialize day-of-week counters
+  const dayCounts: Record<string, { total: number; count: number }> = {
+    Sunday: { total: 0, count: 0 },
+    Monday: { total: 0, count: 0 },
+    Tuesday: { total: 0, count: 0 },
+    Wednesday: { total: 0, count: 0 },
+    Thursday: { total: 0, count: 0 },
+    Friday: { total: 0, count: 0 },
+    Saturday: { total: 0, count: 0 },
+  };
+
+  // Iterate over pages and calculate averages
+  pages.forEach((page: any) => {
+    const createdDate = new Date(page.created_time);
+    const dayOfWeek = createdDate.toLocaleString("en-US", { weekday: "long" });
+
+    if (dayCounts[dayOfWeek]) {
+      dayCounts[dayOfWeek].total += 1;
+      dayCounts[dayOfWeek].count += 1;
+    }
+  });
+
+  // Calculate average and find the most productive day
+  let productiveDay = "";
+  let highestAverage = 0;
+
+  for (const [day, { total, count }] of Object.entries(dayCounts)) {
+    const average = count > 0 ? total / count : 0;
+    if (average > highestAverage) {
+      productiveDay = day;
+      highestAverage = average;
+    }
+  }
+
+  return {
+    productiveDay,
+    averageNotes: Math.round(highestAverage), // Round for better readability
+  };
+}
+
+export async function getUserData(notionClient: Client) {
+  try {
+    // Fetch user info
+    const response = await notionClient.users.list({});
+
+    // Assuming the first user in the list is the authenticated user
+    const user = response.results[0];
+
+    if (!user) {
+      throw new Error("No user data found.");
+    }
+
+    // Extract the necessary fields
+    const userData = {
+      name: user.name || "Unknown User",
+      avatarUrl: user.avatar_url || "", // Fallback if no avatar
+    };
+
+    return userData;
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    return null; // Return null in case of an error
+  }
+}
+
+export async function getTopTemplates(notionClient: Client) {
+  const today = new Date();
+  const oneYearAgo = new Date(
+    today.getFullYear() - 1,
+    today.getMonth(),
+    today.getDate()
+  );
+
+  const response = await notionClient.search({
+    filter: { property: "object", value: "page" },
+    sort: { direction: "ascending", timestamp: "last_edited_time" },
+    query: "", // search all pages
+  });
+
+  const pages = response.results.filter((page: any) => {
+    const createdTime = new Date(page.created_time);
+    return createdTime >= oneYearAgo && createdTime <= today;
+  });
+
+  // Map to track template usage
+  const templateUsage: Record<string, number> = {};
+
+  pages.forEach((page: any) => {
+    const templateName = page.properties?.template?.title?.[0]?.plain_text;
+
+    if (templateName) {
+      templateUsage[templateName] = (templateUsage[templateName] || 0) + 1;
+    }
+  });
+
+  // Convert usage map to an array and sort by usage count in descending order
+  const sortedTemplates = Object.entries(templateUsage)
+    .map(([name, usage]) => ({ name, usage }))
+    .sort((a, b) => b.usage - a.usage);
+
+  // Return the top 3 templates
+  return sortedTemplates.slice(0, 3);
+}

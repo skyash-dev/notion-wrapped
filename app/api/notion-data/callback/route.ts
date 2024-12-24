@@ -7,10 +7,13 @@ import {
   getLongestNote,
   getMostActiveHour,
   getMostActiveMonth,
+  getMostProductiveDayOfWeek,
   getPagesCreated,
   getPersonalityCard,
   getStreak,
-  getTopPages,
+  getTopTemplates,
+  getTotalDatabasesCreated,
+  getUserData,
 } from "@/lib/notion";
 
 export async function GET(request: Request) {
@@ -43,17 +46,23 @@ export async function GET(request: Request) {
       pagesCreated,
       mostActiveHourInt
     );
+    const totalDatabasesCreated = await getTotalDatabasesCreated(notionClient);
+    const mostProductiveDay = await getMostProductiveDayOfWeek(notionClient);
+    const userData = await getUserData(notionClient);
+    const templates = await getTopTemplates(notionClient);
 
     const data = {
       streak,
       pagesCreated,
       universalRank,
       mostActiveMonth,
-      // topPages,
       minutesOfNotes,
-      // longestNote,
       mostActiveHour,
       personalityCard,
+      totalDatabasesCreated,
+      mostProductiveDay,
+      userData,
+      templates,
     };
 
     return NextResponse.json(data);

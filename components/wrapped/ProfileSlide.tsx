@@ -38,8 +38,8 @@ export const ProfileSlide = (props: { notionData: NotionData }) => {
         >
           <div className="absolute inset-0 bg-gradient-to-r from-gray-500 to-gray-700 rounded-full blur-lg transform scale-110" />
           <Avatar className="h-32 w-32 border-4 border-gray-700">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarImage src={props.notionData.userData.avatarUrl} />
+            <AvatarFallback></AvatarFallback>
           </Avatar>
         </motion.div>
 
@@ -49,7 +49,9 @@ export const ProfileSlide = (props: { notionData: NotionData }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <h2 className="text-3xl font-bold text-white mb-2">John Doe</h2>
+          <h2 className="text-3xl font-bold text-white mb-2">
+            {props.notionData.userData.name}
+          </h2>
           <p className="text-xl text-gray-300">Your Year in Notion</p>
         </motion.div>
       </div>

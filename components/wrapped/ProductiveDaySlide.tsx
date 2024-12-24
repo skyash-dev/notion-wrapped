@@ -38,8 +38,13 @@ export const ProductiveDaySlide = (props: { notionData: NotionData }) => {
           <h2 className="text-3xl font-bold text-white mb-4">
             Most Productive Day 📅
           </h2>
-          <p className="text-4xl font-bold text-gray-300 mb-2">Tuesday</p>
-          <p className="text-gray-400">averaging 45 notes per Tuesday</p>
+          <p className="text-4xl font-bold text-gray-300 mb-2">
+            {props.notionData.mostProductiveDay.productiveDay}
+          </p>
+          <p className="text-gray-400">
+            averaging {props.notionData.mostProductiveDay.highestAverage} notes
+            per Tuesday
+          </p>
         </motion.div>
       </div>
     </div>

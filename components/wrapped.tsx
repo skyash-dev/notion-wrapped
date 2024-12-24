@@ -8,7 +8,6 @@ import { YearSlide } from "@/components/wrapped/YearSlide";
 import { ProfileSlide } from "@/components/wrapped/ProfileSlide";
 import { StreakSlide } from "@/components/wrapped/StreakSlide";
 import { NotesSlide } from "@/components/wrapped/NotesSlide";
-import { ProductivitySlide } from "@/components/wrapped/ProductivitySlide";
 import { ProductiveDaySlide } from "@/components/wrapped/ProductiveDaySlide";
 import { DatabasesSlide } from "@/components/wrapped/DatabasesSlide";
 import { TopTemplatesSlide } from "@/components/wrapped/TopTemplatesSlide";
@@ -100,7 +99,6 @@ export function Wrapped() {
     { component: ProfileSlide, props: { notionData } },
     { component: StreakSlide, props: { notionData } },
     { component: NotesSlide, props: { notionData } },
-    { component: ProductivitySlide, props: { notionData } },
     { component: ProductiveDaySlide, props: { notionData } },
     { component: DatabasesSlide, props: { notionData } },
     { component: TopTemplatesSlide, props: { notionData } },
@@ -121,7 +119,7 @@ export function Wrapped() {
   return (
     <>
       <div className="flex items-center justify-center p-2">
-        <div className="h-[95vh] w-[100vw] md:w-[30vw] aspect-[9/16] relative">
+        <div className="h-[90vh] sm:h-[95vh] w-[100vw] md:w-[30vw] aspect-[9/16] relative">
           {!hasInteracted && (
             <motion.div
               initial={{ opacity: 0 }}

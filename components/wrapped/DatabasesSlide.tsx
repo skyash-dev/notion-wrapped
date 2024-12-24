@@ -47,8 +47,10 @@ export const DatabasesSlide = (props: { notionData: NotionData }) => {
           <h2 className="text-3xl font-bold text-white mb-4">
             Total Databases Created 🗄️
           </h2>
-          <p className="text-4xl font-bold text-gray-300 mb-2">24</p>
-          <p className="text-gray-400">organized collections</p>
+          <p className="text-4xl font-bold text-gray-300 mb-2">
+            {props.notionData.databaseCount}
+          </p>
+          <p className="text-gray-400">organized databases</p>
         </motion.div>
       </div>
     </div>
