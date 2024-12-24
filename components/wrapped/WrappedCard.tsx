@@ -56,7 +56,7 @@ export default function WrappedCard(props: { notionData: NotionData }) {
     // Streak
     {
       header: (
-        <div className="flex-1 flex-col gap-10 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center">
+        <div className="flex-1 flex-col gap-10 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-10 md:p-0">
           <motion.h2
             className="text-6xl origin-bottom"
             animate={{
@@ -85,7 +85,7 @@ export default function WrappedCard(props: { notionData: NotionData }) {
     // Pages Created
     {
       header: (
-        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center">
+        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-10 md:p-0">
           <motion.div
             className="text-6xl"
             animate={{
@@ -112,7 +112,7 @@ export default function WrappedCard(props: { notionData: NotionData }) {
     // Universal Rank
     {
       header: (
-        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center">
+        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-10 md:p-0">
           <motion.div
             className="text-6xl"
             animate={{
@@ -141,7 +141,7 @@ export default function WrappedCard(props: { notionData: NotionData }) {
     // Most Active Month
     {
       header: (
-        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center">
+        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-10 md:p-0">
           <motion.div
             className="text-6xl"
             animate={{
@@ -168,7 +168,7 @@ export default function WrappedCard(props: { notionData: NotionData }) {
     // Minutes of Notes
     {
       header: (
-        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center">
+        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-10 md:p-0">
           <motion.div
             className="text-6xl"
             animate={{
@@ -195,7 +195,7 @@ export default function WrappedCard(props: { notionData: NotionData }) {
     // Most Active Hour
     {
       header: (
-        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center">
+        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-10 md:p-0">
           <motion.div
             className="text-6xl"
             animate={{
@@ -222,7 +222,7 @@ export default function WrappedCard(props: { notionData: NotionData }) {
     // Personality Card
     {
       header: (
-        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center">
+        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-10 md:p-0">
           <motion.div
             className="text-6xl"
             animate={{

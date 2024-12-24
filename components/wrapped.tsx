@@ -121,7 +121,7 @@ export function Wrapped() {
   return (
     <>
       <div className="flex items-center justify-center p-2">
-        <div className="h-[95vh] w-[30vw] aspect-[9/16] relative">
+        <div className="h-[98vh] md:h-[95vh] w-[100vw] md:w-[30vw] aspect-[9/16] relative">
           {!hasInteracted && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -142,12 +142,12 @@ export function Wrapped() {
           )}
           {/* Slide Container */}
           <motion.div
-            className="w-full h-full bg-[rgba(44,44,44,1)] rounded-2xl overflow-hidden"
+            className="h-full bg-[rgba(44,44,44,1)] rounded-2xl overflow-hidden"
             initial={{ padding: 0 }}
             animate={{ padding: "0.3rem" }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
           >
-            <div className="w-full h-full bg-[#191919] rounded-xl overflow-hidden">
+            <div className="w-[94vw] md:w-full h-full bg-[#191919] rounded-xl overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentSlide}

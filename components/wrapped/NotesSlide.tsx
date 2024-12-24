@@ -16,10 +16,23 @@ export const NotesSlide = (props: { notionData: NotionData }) => {
 
       <div className="text-center z-10">
         <motion.div
+          className="text-6xl"
+          animate={{
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 0.8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          📄
+        </motion.div>
+        <motion.div
           initial={{ width: 0 }}
           animate={{ width: "100%" }}
           transition={{ duration: 1 }}
-          className="h-px bg-gradient-to-r from-gray-700 via-gray-300 to-gray-700 mb-8"
+          className="h-px bg-gradient-to-r from-gray-700 via-gray-300 to-gray-700 mb-8 mt-12"
         />
 
         <motion.div

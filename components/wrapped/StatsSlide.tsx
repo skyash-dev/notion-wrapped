@@ -54,10 +54,23 @@ export const StatsSlide = (props: { notionData: NotionData }) => {
 
       <div className="max-w-2xl w-full z-10">
         <motion.div
+          className="text-6xl"
+          animate={{
+            rotate: [0, 15, -15, 0],
+          }}
+          transition={{
+            duration: 2.5,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          🏆
+        </motion.div>
+        <motion.div
           initial={{ width: 0 }}
           animate={{ width: "100%" }}
           transition={{ duration: 1 }}
-          className="h-px bg-gradient-to-r from-gray-700 via-gray-300 to-gray-700 mb-8"
+          className="h-px bg-gradient-to-r from-gray-700 via-gray-300 to-gray-700 mb-8 mt-12"
         />
 
         <div className="grid gap-4">

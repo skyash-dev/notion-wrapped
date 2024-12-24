@@ -13,10 +13,24 @@ export const PersonalitySlide = (props: { notionData: NotionData }) => {
 
       <div className="max-w-2xl w-full z-10 text-center">
         <motion.div
+          className="text-6xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, 360],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          🎴
+        </motion.div>
+        <motion.div
           initial={{ width: 0 }}
           animate={{ width: "100%" }}
           transition={{ duration: 1 }}
-          className="h-px bg-gradient-to-r from-gray-700 via-gray-300 to-gray-700 mb-12"
+          className="h-px bg-gradient-to-r from-gray-700 via-gray-300 to-gray-700 mb-12 mt-12"
         />
 
         <motion.div
