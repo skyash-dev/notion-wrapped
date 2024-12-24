@@ -252,7 +252,7 @@ export default function WrappedCard(props: { notionData: NotionData }) {
     <>
       <Card
         ref={cardRef}
-        className="w-[80vw] md:w-[70vw] p-8 bg-[#191919] text-white border-none"
+        className="w-[90vw] sm:w-[80vw] md:w-[70vw] p-8 bg-[#191919] text-white border-none"
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}

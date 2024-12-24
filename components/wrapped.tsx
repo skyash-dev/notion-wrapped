@@ -147,7 +147,7 @@ export function Wrapped() {
             animate={{ padding: "0.3rem" }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
           >
-            <div className="w-[94vw] md:w-full h-full bg-[#191919] rounded-xl overflow-hidden">
+            <div className="w-[98vw] sm:w-[94vw] md:w-full h-full bg-[#191919] rounded-xl overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentSlide}
