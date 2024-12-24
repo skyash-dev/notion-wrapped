@@ -121,7 +121,7 @@ export function Wrapped() {
   return (
     <>
       <div className="flex items-center justify-center p-2">
-        <div className="h-[98vh] md:h-[95vh] w-[100vw] md:w-[30vw] aspect-[9/16] relative">
+        <div className="h-[95vh] w-[100vw] md:w-[30vw] aspect-[9/16] relative">
           {!hasInteracted && (
             <motion.div
               initial={{ opacity: 0 }}
