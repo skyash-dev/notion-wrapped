@@ -36,12 +36,13 @@ export const BentoGridItem = ({
   header?: React.ReactNode;
   icon?: React.ReactNode;
 }) => {
-  const [width, setWidth] = useState<number>(window.innerWidth);
+  const [width, setWidth] = useState<number>(0);
 
   function handleWindowSizeChange() {
     setWidth(window.innerWidth);
   }
   useEffect(() => {
+    setWidth(0);
     window.addEventListener("resize", handleWindowSizeChange);
     return () => {
       window.removeEventListener("resize", handleWindowSizeChange);
