@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
+import { Button } from "./ui/button";
 
 export function ErrorCard() {
   return (
@@ -32,7 +33,9 @@ export function ErrorCard() {
           </h2>
           <p className="text-gray-400 text-center flex flex-col">
             <span>Error: Notion token is missing.</span>
-            <Link href={"/"}>Retry.</Link>
+            <Link href={"/"}>
+              <Button>Retry.</Button>
+            </Link>
           </p>
         </div>
       </Card>
