@@ -20,7 +20,7 @@ export function CSPostHogProvider({ children }: { children: React.ReactNode }) {
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // Start with true to check local storage
+  const [isLoading, setIsLoading] = useState(false); // Start with true to check local storage
 
   useEffect(() => {
     if (typeof window !== "undefined" && process.env.POSTHOG_KEY) {
@@ -29,12 +29,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         person_profiles: "identified_only", // or 'always' to create profiles for anonymous users as well
       });
     }
-    // Check if user is already authenticated
-    const token = localStorage.getItem("notion_token");
-    if (token) {
-      setIsAuthenticated(true);
-    }
-    setIsLoading(false);
   }, []);
 
   const startAuth = () => {
