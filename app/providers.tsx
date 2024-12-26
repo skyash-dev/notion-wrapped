@@ -14,12 +14,6 @@ type AuthState = {
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
 
-if (typeof window !== "undefined") {
-  posthog.init(process.env.POSTHOG_KEY!, {
-    api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
-    person_profiles: "identified_only", // or 'always' to create profiles for anonymous users as well
-  });
-}
 export function CSPostHogProvider({ children }: { children: React.ReactNode }) {
   return <PostHogProvider client={posthog}>{children}</PostHogProvider>;
 }
@@ -29,6 +23,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true); // Start with true to check local storage
 
   useEffect(() => {
+    if (typeof window !== "undefined" && process.env.POSTHOG_KEY) {
+      posthog.init(process.env.POSTHOG_KEY, {
+        api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+        person_profiles: "identified_only", // or 'always' to create profiles for anonymous users as well
+      });
+    }
     // Check if user is already authenticated
     const token = localStorage.getItem("notion_token");
     if (token) {
