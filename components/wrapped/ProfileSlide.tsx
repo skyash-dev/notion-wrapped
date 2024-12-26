@@ -49,10 +49,10 @@ export const ProfileSlide = (props: { notionData: NotionData }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <h2 className="text-3xl font-bold text-white mb-2">
+          <h2 className="text-3xl font-bold text-gray-200 mb-2">
             {props.notionData.userData.name}
           </h2>
-          <p className="text-xl text-gray-300">Your Year in Notion</p>
+          <p className="text-xl text-gray-200">Your Year in Notion</p>
         </motion.div>
       </div>
     </div>

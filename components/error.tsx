@@ -27,7 +27,9 @@ export function ErrorCard() {
               className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-400 to-pink-400"
             />
           </div>
-          <h2 className="text-2xl font-bold text-center text-white">Error</h2>
+          <h2 className="text-2xl font-bold text-center text-gray-200">
+            Error
+          </h2>
           <p className="text-gray-400 text-center flex flex-col">
             <span>Error: Notion token is missing.</span>
             <Link href={"/"}>Retry.</Link>

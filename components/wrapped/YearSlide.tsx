@@ -25,7 +25,7 @@ export const YearSlide = () => {
       {[...Array(6)].map((_, index) => (
         <motion.div
           key={index}
-          className="absolute text-8xl font-bold text-white opacity-80"
+          className="absolute text-8xl font-bold text-gray-200 opacity-80"
           initial={{ y: 0 }}
           animate={{
             y: [0, -20, 0],

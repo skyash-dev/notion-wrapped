@@ -41,10 +41,10 @@ export const StreakSlide = (props: { notionData: NotionData }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2 }}
         >
-          <h2 className="text-3xl font-bold text-white mb-4">
+          <h2 className="text-3xl font-bold text-gray-200 mb-4">
             Longest Streak ⚡️
           </h2>
-          <p className="text-4xl font-bold text-gray-300 mb-2">
+          <p className="text-4xl font-bold text-gray-200 mb-2">
             {props.notionData.streak} Days
           </p>
           <p className="text-gray-400">of consistent note-taking</p>

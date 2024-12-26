@@ -19,7 +19,7 @@ export const TopTemplatesSlide = (props: { notionData: NotionData }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2 }}
         >
-          <h2 className="text-3xl font-bold text-white mb-8">
+          <h2 className="text-3xl font-bold text-gray-200 mb-8">
             Most Used Templates 📑
           </h2>
 
@@ -32,7 +32,7 @@ export const TopTemplatesSlide = (props: { notionData: NotionData }) => {
                 transition={{ delay: 2.5 + index * 0.2 }}
                 className="bg-[rgba(44,44,44,1)] p-4 rounded-lg"
               >
-                <h3 className="text-xl font-bold text-gray-300">
+                <h3 className="text-xl font-bold text-gray-200">
                   {template.name}
                 </h3>
                 <p className="text-gray-400">{template.usage}</p>

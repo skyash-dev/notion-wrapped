@@ -9,7 +9,7 @@ export default function Home() {
   const { isAuthenticated, isLoading } = useAuth();
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white relative overflow-hidden">
+    <main className="min-h-screen bg-[#191919] text-gray-200 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -inset-[10px] opacity-50">

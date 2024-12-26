@@ -33,17 +33,17 @@ export const ProductiveDaySlide = (props: { notionData: NotionData }) => {
             animate={{ rotate: [0, 10, -10, 0] }}
             transition={{ duration: 1, repeat: Infinity }}
           >
-            <Calendar className="w-12 h-12 text-gray-300" />
+            <Calendar className="w-12 h-12 text-gray-200" />
           </motion.div>
-          <h2 className="text-3xl font-bold text-white mb-4">
+          <h2 className="text-3xl font-bold text-gray-200 mb-4">
             Most Productive Day 📅
           </h2>
-          <p className="text-4xl font-bold text-gray-300 mb-2">
+          <p className="text-4xl font-bold text-gray-200 mb-2">
             {props.notionData.mostProductiveDay.productiveDay}
           </p>
           <p className="text-gray-400">
             averaging {props.notionData.mostProductiveDay.highestAverage} notes
-            per Tuesday
+            per {props.notionData.mostProductiveDay.productiveDay}
           </p>
         </motion.div>
       </div>

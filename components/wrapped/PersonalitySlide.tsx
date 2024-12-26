@@ -51,7 +51,7 @@ export const PersonalitySlide = (props: { notionData: NotionData }) => {
                   repeat: Infinity,
                   delay: index * 0.2,
                 }}
-                className="text-gray-300 relative"
+                className="text-gray-200 relative"
               >
                 <motion.div
                   className="absolute inset-0 bg-gray-500/20 blur-xl rounded-full"
@@ -70,10 +70,10 @@ export const PersonalitySlide = (props: { notionData: NotionData }) => {
             ))}
           </div>
 
-          <h2 className="text-3xl font-bold text-white mb-4">
+          <h2 className="text-3xl font-bold text-gray-200 mb-4">
             Your Notion Personality
           </h2>
-          <p className="text-4xl font-bold text-gray-300 mb-4">
+          <p className="text-4xl font-bold text-gray-200 mb-4">
             {props.notionData.personalityCard}
           </p>
           <p className="text-xl text-gray-400">

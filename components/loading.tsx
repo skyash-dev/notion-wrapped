@@ -26,7 +26,7 @@ export function Loading() {
               className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-400 to-pink-400"
             />
           </div>
-          <h2 className="text-2xl font-bold text-center text-white">
+          <h2 className="text-2xl font-bold text-center text-gray-200">
             Loading your notes...
           </h2>
           <p className="text-gray-400 text-center">

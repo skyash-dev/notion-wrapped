@@ -2,6 +2,9 @@
 
 import { createContext, useContext, useState, useEffect } from "react";
 
+import posthog from "posthog-js";
+import { PostHogProvider } from "posthog-js/react";
+
 type AuthState = {
   isAuthenticated: boolean;
   isLoading: boolean;
@@ -11,13 +14,23 @@ type AuthState = {
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
 
+if (typeof window !== "undefined") {
+  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
+    api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+    person_profiles: "identified_only", // or 'always' to create profiles for anonymous users as well
+  });
+}
+export function CSPostHogProvider({ children }: { children: React.ReactNode }) {
+  return <PostHogProvider client={posthog}>{children}</PostHogProvider>;
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Start with true to check local storage
 
   useEffect(() => {
     // Check if user is already authenticated
-    const token = localStorage.getItem('notion_token');
+    const token = localStorage.getItem("notion_token");
     if (token) {
       setIsAuthenticated(true);
     }
@@ -34,7 +47,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isLoading, startAuth, completeAuth }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, isLoading, startAuth, completeAuth }}
+    >
       {children}
     </AuthContext.Provider>
   );

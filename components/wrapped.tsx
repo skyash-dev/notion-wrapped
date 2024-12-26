@@ -100,8 +100,6 @@ export function Wrapped() {
     { component: StreakSlide, props: { notionData } },
     { component: NotesSlide, props: { notionData } },
     { component: ProductiveDaySlide, props: { notionData } },
-    { component: DatabasesSlide, props: { notionData } },
-    { component: TopTemplatesSlide, props: { notionData } },
     { component: StatsSlide, props: { notionData } },
     { component: PersonalitySlide, props: { notionData } },
   ];
@@ -111,7 +109,7 @@ export function Wrapped() {
   if (showWrappedCard) {
     return (
       <div className="flex justify-center items-center flex-col p-4">
-        <WrappedCard notionData={notionData} />
+        <WrappedCard notionData={notionData} isLanding={false} />
       </div>
     );
   }
@@ -131,7 +129,7 @@ export function Wrapped() {
                   setHasInteracted(true);
                   setIsMuted(false);
                 }}
-                className="bg-[#191919] hover:bg-[rgba(31,31,31,1)] hover:text-white border-[1px] border-gray-400 hover:border-gray-200 text-gray-200 font-bold px-6 py-3 rounded-full flex items-center gap-2"
+                className="bg-[#1A1A1A] hover:bg-[rgba(31,31,31,1)] hover:text-white border-[1px] border-gray-400 hover:border-gray-200 text-gray-200 font-bold px-6 py-3 rounded-full flex items-center gap-2"
               >
                 <PlayIcon className="w-5 h-5" />
                 Click to Start!
@@ -145,7 +143,7 @@ export function Wrapped() {
             animate={{ padding: "0.3rem" }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
           >
-            <div className="w-[98vw] sm:w-[94vw] md:w-full h-full bg-[#191919] rounded-xl overflow-hidden">
+            <div className="w-[98vw] sm:w-[94vw] md:w-full h-full bg-[#1A1A1A] rounded-xl overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentSlide}
