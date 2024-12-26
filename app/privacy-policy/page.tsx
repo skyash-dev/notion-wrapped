@@ -150,10 +150,10 @@ const PrivacyPolicy = () => {
             If you have any questions or concerns about this Privacy Policy or
             how we handle your data, please contact us at{" "}
             <a
-              href="mailto:support@notion-wrapped.com"
+              href="mailto:support@notionwrapped.tech"
               className="text-blue-600 underline"
             >
-              support@notion-wrapped.com
+              support@notionwrapped.tech
             </a>
             .
           </p>
