@@ -27,7 +27,7 @@ export function useNotionAuth() {
     const token = params.get("token");
 
     if (token) {
-      completeAuth();
+      completeAuth(token);
       window.history.replaceState({}, "", "/");
     }
   }, [completeAuth]);

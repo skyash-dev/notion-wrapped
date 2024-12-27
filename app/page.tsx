@@ -5,24 +5,9 @@ import { Landing } from "@/components/landing";
 import { Loading } from "@/components/loading";
 import { Wrapped } from "@/components/wrapped";
 import Head from "next/head";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 
 export default function Home() {
-  const { isAuthenticated, isLoading } = useAuth();
-  const searchParams = useSearchParams();
-  const [token, setToken] = useState<string | null>(null);
-
-  // Extract token from searchParams
-  useEffect(() => {
-    if (localStorage.getItem("notion_token")) {
-      localStorage.removeItem("notion_token");
-    }
-    const tokenParam = searchParams.get("token");
-    if (tokenParam) {
-      setToken(tokenParam);
-    }
-  }, [searchParams]);
+  const { isAuthenticated, isLoading, token } = useAuth();
 
   return (
     <>

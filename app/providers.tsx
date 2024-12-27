@@ -8,8 +8,9 @@ import { PostHogProvider } from "posthog-js/react";
 type AuthState = {
   isAuthenticated: boolean;
   isLoading: boolean;
+  token: string | null;
   startAuth: () => void;
-  completeAuth: () => void;
+  completeAuth: (token: string) => void;
 };
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
@@ -26,20 +27,22 @@ export function CSPostHogProvider({ children }: { children: React.ReactNode }) {
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Start with true to check local storage
+  const [isLoading, setIsLoading] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
 
   const startAuth = () => {
     setIsLoading(true);
   };
 
-  const completeAuth = () => {
+  const completeAuth = (token: string) => {
     setIsAuthenticated(true);
     setIsLoading(false);
+    setToken(token);
   };
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, isLoading, startAuth, completeAuth }}
+      value={{ isAuthenticated, isLoading, token, startAuth, completeAuth }}
     >
       {children}
     </AuthContext.Provider>
