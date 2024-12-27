@@ -33,9 +33,9 @@ export function ErrorCard() {
           </h2>
           <p className="text-gray-400 text-center flex flex-col">
             <span>Error: Notion token is missing.</span>
-            <Link href={"/"}>
-              <Button>Retry.</Button>
-            </Link>
+            <Button size="lg" className=" mt-8 text-gray-800 bg-gray-200">
+              <Link href={"/"}>Retry</Link>
+            </Button>
           </p>
         </div>
       </Card>

@@ -26,16 +26,7 @@ export function CSPostHogProvider({ children }: { children: React.ReactNode }) {
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // Start with true to check local storage
-
-  useEffect(() => {
-    // Check if user is already authenticated
-    const token = localStorage.getItem("notion_token");
-    if (token) {
-      setIsAuthenticated(true);
-    }
-    setIsLoading(false);
-  }, []);
+  const [isLoading, setIsLoading] = useState(false); // Start with true to check local storage
 
   const startAuth = () => {
     setIsLoading(true);

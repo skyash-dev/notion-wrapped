@@ -18,7 +18,7 @@ import { Loading } from "./loading";
 
 const SLIDE_DURATION = 4000; // 4 seconds per slide
 
-export function Wrapped() {
+export function Wrapped({ token }: { token: string }) {
   const [isMuted, setIsMuted] = useState(true);
   const [hasInteracted, setHasInteracted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -34,8 +34,6 @@ export function Wrapped() {
   // Fetch Notion data on mount
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem("notion_token");
-
       if (!token) {
         setError("Notion token is missing.");
         return;
@@ -91,8 +89,6 @@ export function Wrapped() {
 
   if (error) return <ErrorCard />;
   if (!notionData) return <Loading />;
-
-  localStorage.removeItem("notion_token");
 
   const slides = [
     { component: YearSlide, props: { notionData } },
