@@ -34,48 +34,50 @@ export default function WrappedCard(props: {
   const handleDownload = async () => {
     if (cardRef.current) {
       try {
-        // Determine the aspect ratio based on the screen size
-        const isMobile = window.innerWidth <= 768; // Adjust breakpoint as needed
-        const aspect = isMobile ? "portrait" : "landscape";
+        // Determine aspect ratio (portrait for mobile, landscape for desktop)
+        const isMobile = window.innerWidth <= 768;
+        const width = isMobile ? 720 : 1280; // Portrait width (mobile) or Landscape width (desktop)
+        const height = isMobile ? 1280 : 720; // Portrait height (mobile) or Landscape height (desktop)
 
-        // Create a hidden container with the desired aspect ratio
+        // Create a hidden container
         const hiddenContainer = document.createElement("div");
         hiddenContainer.style.position = "fixed";
         hiddenContainer.style.left = "-9999px";
-        hiddenContainer.style.width =
-          aspect === "portrait" ? "720px" : "1280px"; // Portrait: 720x1280, Landscape: 1280x720
-        hiddenContainer.style.height =
-          aspect === "portrait" ? "1280px" : "720px";
+        hiddenContainer.style.width = `${width}px`;
+        hiddenContainer.style.height = `${height}px`;
         hiddenContainer.style.display = "flex";
         hiddenContainer.style.alignItems = "center";
         hiddenContainer.style.justifyContent = "center";
         hiddenContainer.style.background =
-          "linear-gradient(to right, #a78bfa, #f472b6)"; // Gradient (matches Tailwind classes)
-        hiddenContainer.style.borderRadius = "16px"; // Optional: Add rounded corners
+          "linear-gradient(to right, #a78bfa, #f472b6)"; // Gradient background
+        hiddenContainer.style.borderRadius = "16px"; // Optional rounded corners
 
         // Clone the card and append to the hidden container
         const clonedCard = cardRef.current.cloneNode(true) as HTMLElement;
-        clonedCard.style.transform = "scale(1)"; // Ensure correct scale
-        clonedCard.style.margin = "auto";
+        clonedCard.style.transform = "scale(1)"; // Ensure correct scaling
+        clonedCard.style.margin = "auto"; // Center the card
         hiddenContainer.appendChild(clonedCard);
         document.body.appendChild(hiddenContainer);
 
-        // Generate the image from the hidden container
+        // Wait for all fonts and images to load
+        await document.fonts.ready;
+
+        // Generate the image
         const dataUrl = await toPng(hiddenContainer, {
           cacheBust: true,
           pixelRatio: 2, // High resolution
+          backgroundColor: undefined, // Let the gradient be the background
         });
 
-        // Cleanup
+        // Cleanup the hidden container
         document.body.removeChild(hiddenContainer);
 
-        // Create a download link
+        // Create a link for download
         const link = document.createElement("a");
         link.href = dataUrl;
-        link.download =
-          aspect === "portrait"
-            ? "notion-wrapped-portrait.png"
-            : "notion-wrapped-landscape.png";
+        link.download = isMobile
+          ? "notion-wrapped-portrait.png"
+          : "notion-wrapped-landscape.png";
         link.click();
       } catch (error) {
         console.error("Failed to generate image:", error);

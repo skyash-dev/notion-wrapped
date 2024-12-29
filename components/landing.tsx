@@ -114,7 +114,7 @@ export function Landing() {
           </div>
         </motion.h2>
         <Card className="bg-black/20 backdrop-blur-xl transform transition-transform">
-          <WrappedCard notionData={defaultNotionData} isLanding={true} />
+          <WrappedCard notionData={defaultNotionData} isLanding={false} />
         </Card>
       </motion.div>
       <div className="pb-16 text-gray-200 flex flex-col items-center gap-2 ">
