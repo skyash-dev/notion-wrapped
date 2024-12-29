@@ -5,7 +5,7 @@ import { Share2, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useRef } from "react";
-import { domtoimage } from "dom-to-image-more";
+import { toPng } from "html-to-image";
 
 import React from "react";
 import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
@@ -34,56 +34,13 @@ export default function WrappedCard(props: {
   const handleDownload = async () => {
     if (cardRef.current) {
       try {
-        // Determine the device type
-        const isMobile = window.innerWidth <= 768;
-        const width = isMobile ? 720 : 1280; // Portrait (mobile) or Landscape (desktop)
-        const height = isMobile ? 1280 : 720;
-
-        // Create a hidden container
-        const hiddenContainer = document.createElement("div");
-        hiddenContainer.style.position = "fixed";
-        hiddenContainer.style.left = "-9999px";
-        hiddenContainer.style.width = `${width}px`;
-        hiddenContainer.style.height = `${height}px`;
-        hiddenContainer.style.display = "flex";
-        hiddenContainer.style.alignItems = "center";
-        hiddenContainer.style.justifyContent = "center";
-        hiddenContainer.style.background =
-          "linear-gradient(to right, #a78bfa, #f472b6)"; // Gradient background
-        hiddenContainer.style.borderRadius = "16px"; // Optional rounded corners
-        hiddenContainer.style.overflow = "hidden";
-
-        // Clone the card and append it to the container
-        const clonedCard = cardRef.current.cloneNode(true) as HTMLElement;
-        clonedCard.style.transform = "scale(1)";
-        clonedCard.style.margin = "auto";
-        hiddenContainer.appendChild(clonedCard);
-        document.body.appendChild(hiddenContainer);
-
-        // Ensure all fonts and images are loaded
-        await document.fonts.ready;
-
         // Generate the image
-        const dataUrl = await domtoimage.toPng(hiddenContainer, {
-          quality: 1, // Maximum quality
-          width: width, // Match specified width
-          height: height, // Match specified height
-          style: {
-            // Inline styles for better accuracy
-            fontFamily: window.getComputedStyle(document.body).fontFamily,
-            backgroundColor: "transparent", // Ensure the gradient shows
-          },
-        });
-
-        // Cleanup the hidden container
-        document.body.removeChild(hiddenContainer);
-
-        // Trigger the download
+        const dataUrl = await toPng(cardRef.current, { cacheBust: true });
+        // Create a link element
         const link = document.createElement("a");
         link.href = dataUrl;
-        link.download = isMobile
-          ? "notion-wrapped-portrait.png"
-          : "notion-wrapped-landscape.png";
+        link.download = "notion-wrapped.png";
+        // Trigger the download
         link.click();
       } catch (error) {
         console.error("Failed to generate image:", error);
