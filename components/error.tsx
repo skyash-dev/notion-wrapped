@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
-import Link from "next/link";
 import { Button } from "./ui/button";
 
 export function ErrorCard() {
@@ -34,11 +33,11 @@ export function ErrorCard() {
           <p className="text-gray-400 text-center flex flex-col">
             <span>Error: Notion token is missing.</span>
             <Button size="lg" className=" mt-8 text-gray-800 bg-gray-200">
-              <Link
+              <a
                 href={`https://www.notion.so/install-integration?response_type=code&client_id=${process.env.NEXT_PUBLIC_NOTION_CLIENT_ID}&redirect_uri=https%3A%2F%2Fwww.notionwrapped.tech%2Fapi%2Fauth%2Fcallback&owner=user`}
               >
                 Retry
-              </Link>
+              </a>
             </Button>
           </p>
         </div>
