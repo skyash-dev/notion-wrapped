@@ -34,13 +34,48 @@ export default function WrappedCard(props: {
   const handleDownload = async () => {
     if (cardRef.current) {
       try {
-        // Generate the image
-        const dataUrl = await toPng(cardRef.current, { cacheBust: true });
-        // Create a link element
+        // Determine the aspect ratio based on the screen size
+        const isMobile = window.innerWidth <= 768; // Adjust breakpoint as needed
+        const aspect = isMobile ? "portrait" : "landscape";
+
+        // Create a hidden container with the desired aspect ratio
+        const hiddenContainer = document.createElement("div");
+        hiddenContainer.style.position = "fixed";
+        hiddenContainer.style.left = "-9999px";
+        hiddenContainer.style.width =
+          aspect === "portrait" ? "720px" : "1280px"; // Portrait: 720x1280, Landscape: 1280x720
+        hiddenContainer.style.height =
+          aspect === "portrait" ? "1280px" : "720px";
+        hiddenContainer.style.display = "flex";
+        hiddenContainer.style.alignItems = "center";
+        hiddenContainer.style.justifyContent = "center";
+        hiddenContainer.style.background =
+          "linear-gradient(to right, #a78bfa, #f472b6)"; // Gradient (matches Tailwind classes)
+        hiddenContainer.style.borderRadius = "16px"; // Optional: Add rounded corners
+
+        // Clone the card and append to the hidden container
+        const clonedCard = cardRef.current.cloneNode(true) as HTMLElement;
+        clonedCard.style.transform = "scale(1)"; // Ensure correct scale
+        clonedCard.style.margin = "auto";
+        hiddenContainer.appendChild(clonedCard);
+        document.body.appendChild(hiddenContainer);
+
+        // Generate the image from the hidden container
+        const dataUrl = await toPng(hiddenContainer, {
+          cacheBust: true,
+          pixelRatio: 2, // High resolution
+        });
+
+        // Cleanup
+        document.body.removeChild(hiddenContainer);
+
+        // Create a download link
         const link = document.createElement("a");
         link.href = dataUrl;
-        link.download = "notion-wrapped.png";
-        // Trigger the download
+        link.download =
+          aspect === "portrait"
+            ? "notion-wrapped-portrait.png"
+            : "notion-wrapped-landscape.png";
         link.click();
       } catch (error) {
         console.error("Failed to generate image:", error);
@@ -81,7 +116,7 @@ export default function WrappedCard(props: {
             🔥
           </motion.h2>
           <div className="md:mx-4 w-2/3">
-            <h3 className="font-bold text-lg sm:text-xl md:text-2xl py-0 sm:py-2">
+            <h3 className="font-bold text-lg sm:text-xl md:text-2xl py-2">
               {props.notionData.streak} Days
             </h3>
             <p className="text-sm text-gray-200 md:text-base">
@@ -110,7 +145,7 @@ export default function WrappedCard(props: {
             📄
           </motion.div>
           <div className="md:mx-4 w-2/3">
-            <h3 className="font-bold text-lg sm:text-xl md:text-2xl py-0 sm:py-2">
+            <h3 className="font-bold text-lg sm:text-xl md:text-2xl py-2">
               {props.notionData.pagesCreated} Pages
             </h3>
             <p className="text-sm text-gray-200 md:text-base">
@@ -139,7 +174,7 @@ export default function WrappedCard(props: {
             🏆
           </motion.div>
           <div className="md:mx-4 w-2/3">
-            <h3 className="font-bold text-lg sm:text-xl md:text-2xl py-0 sm:py-2">
+            <h3 className="font-bold text-lg sm:text-xl md:text-2xl py-2">
               {props.notionData.universalRank}
             </h3>
             <p className="text-sm text-gray-200 md:text-base">
@@ -168,7 +203,7 @@ export default function WrappedCard(props: {
             📅
           </motion.div>
           <div className="md:mx-4 w-2/3">
-            <h3 className="font-bold text-lg sm:text-xl md:text-2xl py-0 sm:py-2">
+            <h3 className="font-bold text-lg sm:text-xl md:text-2xl py-2">
               {props.notionData.mostActiveMonth}
             </h3>
             <p className="text-sm text-gray-200 md:text-base">
@@ -197,7 +232,7 @@ export default function WrappedCard(props: {
             🗒️
           </motion.div>
           <div className="md:mx-4 w-2/3">
-            <h3 className="font-bold text-lg sm:text-xl md:text-2xl py-0 sm:py-2">
+            <h3 className="font-bold text-lg sm:text-xl md:text-2xl py-2">
               {props.notionData.minutesOfNotes} Minutes
             </h3>
             <p className="text-sm text-gray-200 md:text-base">
@@ -226,7 +261,7 @@ export default function WrappedCard(props: {
             ⏰
           </motion.div>
           <div className="md:mx-4 w-2/3">
-            <h3 className="font-bold text-lg sm:text-xl md:text-2xl py-0 sm:py-2">
+            <h3 className="font-bold text-lg sm:text-xl md:text-2xl py-2">
               {props.notionData.mostActiveHour}
             </h3>
             <p className="text-sm text-gray-200 md:text-base">
@@ -256,7 +291,7 @@ export default function WrappedCard(props: {
             🎴
           </motion.div>
           <div className="md:mx-4 w-2/3">
-            <h3 className="font-bold text-lg sm:text-xl md:text-2xl py-0 sm:py-2">
+            <h3 className="font-bold text-lg sm:text-xl md:text-2xl py-2">
               {props.notionData.personalityCard}
             </h3>
             <p className="text-sm text-gray-200 md:text-base">
