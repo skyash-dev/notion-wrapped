@@ -64,9 +64,9 @@ export default function WrappedCard(props: {
     // Streak
     {
       header: (
-        <div className="flex-1 flex-col gap-10 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-10 md:p-0">
+        <div className="flex-1 flex-row md:flex-col gap-10 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-2 md:p-0">
           <motion.h2
-            className="text-6xl origin-bottom"
+            className="text-3xl md:text-6xl origin-bottom"
             animate={{
               scale: [1, 1.1, 1],
               rotate: [-5, 5, -5],
@@ -80,11 +80,13 @@ export default function WrappedCard(props: {
           >
             🔥
           </motion.h2>
-          <div className="mx-4">
-            <h3 className="font-bold text-2xl py-2">
+          <div className="md:mx-4 w-2/3">
+            <h3 className="font-bold text-xl md:text-2xl py-2">
               {props.notionData.streak} Days
             </h3>
-            <p className="text-gray-200">in a row, you&apos;re on fire!</p>
+            <p className="text-sm text-gray-200 md:text-base">
+              in a row, you&apos;re on fire!
+            </p>
           </div>
         </div>
       ),
@@ -93,11 +95,11 @@ export default function WrappedCard(props: {
     // Pages Created
     {
       header: (
-        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-10 md:p-0">
+        <div className="flex-1 flex-row md:flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-2 md:p-0">
           <motion.div
-            className="text-6xl"
+            className="text-3xl md:text-6xl"
             animate={{
-              scale: [1, 1.2, 1],
+              scale: [1, 1.1, 1],
             }}
             transition={{
               duration: 0.8,
@@ -107,11 +109,13 @@ export default function WrappedCard(props: {
           >
             📄
           </motion.div>
-          <div className="mx-4">
-            <h3 className="font-bold text-2xl py-2">
+          <div className="md:mx-4 w-2/3">
+            <h3 className="font-bold text-xl md:text-2xl py-2">
               {props.notionData.pagesCreated} Pages
             </h3>
-            <p className="text-gray-200">created — a creator in action!</p>
+            <p className="text-sm text-gray-200 md:text-base">
+              created — a creator in action!
+            </p>
           </div>
         </div>
       ),
@@ -120,9 +124,9 @@ export default function WrappedCard(props: {
     // Universal Rank
     {
       header: (
-        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-10 md:p-0">
+        <div className="flex-1 flex-row md:flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-2 md:p-0">
           <motion.div
-            className="text-6xl"
+            className="text-3xl md:text-6xl"
             animate={{
               rotate: [0, 15, -15, 0],
             }}
@@ -134,11 +138,11 @@ export default function WrappedCard(props: {
           >
             🏆
           </motion.div>
-          <div className="mx-4">
-            <h3 className="font-bold text-2xl py-2">
+          <div className="md:mx-4 w-2/3">
+            <h3 className="font-bold text-xl md:text-2xl py-2">
               {props.notionData.universalRank}
             </h3>
-            <p className="text-gray-200">
+            <p className="text-sm text-gray-200 md:text-base">
               Rising through the ranks like a star!
             </p>
           </div>
@@ -149,9 +153,9 @@ export default function WrappedCard(props: {
     // Most Active Month
     {
       header: (
-        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-10 md:p-0">
+        <div className="flex-1 flex-row md:flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-2 md:p-0">
           <motion.div
-            className="text-6xl"
+            className="text-3xl md:text-6xl"
             animate={{
               y: [0, -10, 0],
             }}
@@ -163,11 +167,13 @@ export default function WrappedCard(props: {
           >
             📅
           </motion.div>
-          <div className="mx-4">
-            <h3 className="font-bold text-2xl py-2">
+          <div className="md:mx-4 w-2/3">
+            <h3 className="font-bold text-xl md:text-2xl py-2">
               {props.notionData.mostActiveMonth}
             </h3>
-            <p className="text-gray-200">was your most productive month!</p>
+            <p className="text-sm text-gray-200 md:text-base">
+              was your most productive month!
+            </p>
           </div>
         </div>
       ),
@@ -176,9 +182,9 @@ export default function WrappedCard(props: {
     // Minutes of Notes
     {
       header: (
-        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-10 md:p-0">
+        <div className="flex-1 flex-row md:flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-2 md:p-0">
           <motion.div
-            className="text-6xl"
+            className="text-3xl md:text-6xl"
             animate={{
               scale: [1, 0.9, 1],
             }}
@@ -190,11 +196,13 @@ export default function WrappedCard(props: {
           >
             🗒️
           </motion.div>
-          <div className="mx-4">
-            <h3 className="font-bold text-2xl py-2">
+          <div className="md:mx-4 w-2/3">
+            <h3 className="font-bold text-xl md:text-2xl py-2">
               {props.notionData.minutesOfNotes} Minutes
             </h3>
-            <p className="text-gray-200">spent taking notes of brilliance.</p>
+            <p className="text-sm text-gray-200 md:text-base">
+              spent taking notes of brilliance.
+            </p>
           </div>
         </div>
       ),
@@ -203,9 +211,9 @@ export default function WrappedCard(props: {
     // Most Active Hour
     {
       header: (
-        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-10 md:p-0">
+        <div className="flex-1 flex-row md:flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-2 md:p-0">
           <motion.div
-            className="text-6xl"
+            className="text-3xl md:text-6xl"
             animate={{
               rotate: [0, 10, -10, 0],
             }}
@@ -217,11 +225,13 @@ export default function WrappedCard(props: {
           >
             ⏰
           </motion.div>
-          <div className="mx-4">
-            <h3 className="font-bold text-2xl py-2">
+          <div className="md:mx-4 w-2/3">
+            <h3 className="font-bold text-xl md:text-2xl py-2">
               {props.notionData.mostActiveHour}
             </h3>
-            <p className="text-gray-200">was your magic hour!</p>
+            <p className="text-sm text-gray-200 md:text-base">
+              was your magic hour!
+            </p>
           </div>
         </div>
       ),
@@ -230,9 +240,9 @@ export default function WrappedCard(props: {
     // Personality Card
     {
       header: (
-        <div className="flex-1 flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-10 md:p-0">
+        <div className="flex-1 flex-row md:flex-col gap-6 rounded-xl bg-[rgba(32,32,32,1)] flex justify-center items-center p-2 md:p-0">
           <motion.div
-            className="text-6xl"
+            className="text-3xl md:text-6xl"
             animate={{
               scale: [1, 1.2, 1],
               rotate: [0, 360],
@@ -245,11 +255,13 @@ export default function WrappedCard(props: {
           >
             🎴
           </motion.div>
-          <div className="mx-4">
-            <h3 className="font-bold text-2xl py-2">
+          <div className="md:mx-4 w-2/3">
+            <h3 className="font-bold text-xl md:text-2xl py-2">
               {props.notionData.personalityCard}
             </h3>
-            <p className="text-gray-200">Harmony of creativity and logic!</p>
+            <p className="text-sm text-gray-200 md:text-base">
+              Harmony of creativity and logic!
+            </p>
           </div>
         </div>
       ),
@@ -260,17 +272,17 @@ export default function WrappedCard(props: {
     <>
       <Card
         ref={cardRef}
-        className="w-[90vw] sm:w-[80vw] md:w-[70vw] p-6 bg-[#191919] text-gray-200  border-gray-800"
+        className="w-[90vw] sm:w-[80vw] md:w-[70vw] p-6 bg-[#191919] text-sm text-gray-200 md:text-base"
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="space-y-3"
+          className="space-y-0 md:space-y-3"
         >
-          {/* <h1 className="text-2xl font-bold text-center mb-8">
+          {/* <h1 className="text-xl md:text-2xl font-bold text-center mb-8">
             Notion Wrapped 2024
           </h1> */}
-          <div className="flex justify-center items-center gap-3 py-6">
+          <div className="flex justify-center items-center gap-3 pb-6">
             <Avatar className="h-16 w-16">
               <AvatarImage
                 src={props.notionData.userData.avatarUrl}
@@ -281,7 +293,9 @@ export default function WrappedCard(props: {
               <p className="text-xl font-bold">
                 {props.notionData.userData.name}
               </p>
-              <p className="text-sm text-gray-200">2024 Year in Notes</p>
+              <p className="text-sm text-gray-200 md:text-base">
+                2024 Year in Notes
+              </p>
             </span>
           </div>
 
@@ -297,7 +311,7 @@ export default function WrappedCard(props: {
         </motion.div>
       </Card>
       {!props.isLanding ? (
-        <div className="flex gap-4 justify-center mt-8">
+        <div className="flex gap-2 justify-center mt-8">
           <Button
             onClick={handleShare}
             className="bg-white text-black hover:bg-gray-100"

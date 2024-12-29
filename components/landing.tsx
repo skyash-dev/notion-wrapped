@@ -113,7 +113,7 @@ export function Landing() {
             <ArrowDown className="w-5 h-5 text-gray-400 hover:text-gray-200 cursor-pointer" />
           </div>
         </motion.h2>
-        <Card className="pb-4 bg-black/20 backdrop-blur-xl transform transition-transform">
+        <Card className="bg-black/20 backdrop-blur-xl transform transition-transform">
           <WrappedCard notionData={defaultNotionData} isLanding={true} />
         </Card>
       </motion.div>
