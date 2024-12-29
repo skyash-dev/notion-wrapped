@@ -34,7 +34,11 @@ export function ErrorCard() {
           <p className="text-gray-400 text-center flex flex-col">
             <span>Error: Notion token is missing.</span>
             <Button size="lg" className=" mt-8 text-gray-800 bg-gray-200">
-              <Link href={"/"}>Retry</Link>
+              <Link
+                href={`https://www.notion.so/install-integration?response_type=code&client_id=${process.env.NEXT_PUBLIC_NOTION_CLIENT_ID}&redirect_uri=https%3A%2F%2Fwww.notionwrapped.tech%2Fapi%2Fauth%2Fcallback&owner=user`}
+              >
+                Retry
+              </Link>
             </Button>
           </p>
         </div>
