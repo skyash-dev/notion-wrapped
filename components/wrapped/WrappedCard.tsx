@@ -5,7 +5,6 @@ import { Share2, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useRef } from "react";
-import { toPng } from "html-to-image";
 
 import React from "react";
 import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
@@ -31,51 +30,35 @@ export default function WrappedCard(props: {
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const handleDownload = async () => {
-    if (cardRef.current) {
-      try {
-        // Create a hidden container
-        const hiddenContainer = document.createElement("div");
-        hiddenContainer.style.position = "absolute";
-        hiddenContainer.style.top = "0";
-        hiddenContainer.style.left = "0";
-        hiddenContainer.style.width = "1280px"; // Landscape width
-        hiddenContainer.style.height = "720px"; // Landscape height
-        hiddenContainer.style.visibility = "hidden"; // Keep it hidden but renderable
-        hiddenContainer.style.background =
-          "linear-gradient(to right, #a78bfa, #f472b6)"; // Gradient background
-        hiddenContainer.style.borderRadius = "16px";
+  const handleDownload = () => {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
 
-        // Clone the card and append to the hidden container
-        const clonedCard = cardRef.current.cloneNode(true) as HTMLElement;
-        clonedCard.style.transform = "scale(1.2)"; // Adjust scale if needed
-        hiddenContainer.appendChild(clonedCard);
-        document.body.appendChild(hiddenContainer);
+    // Set canvas dimensions for landscape or portrait
+    const isMobile = window.innerWidth < 768;
+    canvas.width = isMobile ? 720 : 1280;
+    canvas.height = isMobile ? 1280 : 720;
 
-        // Wait for fonts and styles to load
-        await document.fonts.ready;
+    // Gradient background
+    const gradient = ctx!.createLinearGradient(0, 0, canvas.width, 0);
+    gradient.addColorStop(0, "#a78bfa");
+    gradient.addColorStop(1, "#f472b6");
+    ctx!.fillStyle = gradient;
+    ctx!.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Generate the image
-        const dataUrl = await toPng(hiddenContainer, {
-          cacheBust: true,
-          quality: 1,
-          style: {
-            fontFamily: window.getComputedStyle(document.body).fontFamily,
-          },
-        });
+    // Custom styling for the card content
+    ctx!.fillStyle = "#fff";
+    ctx!.font = "bold 36px Arial";
+    ctx!.textAlign = "center";
+    ctx!.fillText("Notion Wrapped", canvas.width / 2, canvas.height / 4);
 
-        // Remove the hidden container
-        document.body.removeChild(hiddenContainer);
+    // Add more content programmatically if needed...
 
-        // Create a link for download
-        const link = document.createElement("a");
-        link.href = dataUrl;
-        link.download = "notion-wrapped.png";
-        link.click();
-      } catch (error) {
-        console.error("Failed to generate image:", error);
-      }
-    }
+    // Download the canvas as an image
+    const link = document.createElement("a");
+    link.download = "notion-wrapped.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
   };
 
   const handleShare = async () => {
