@@ -32,57 +32,78 @@ export default function WrappedCard(props: {
 
   const handleDownload = async () => {
     if (cardRef.current) {
-      // Get card dimensions
-      const cardWidth = cardRef.current.offsetWidth;
-      const cardHeight = cardRef.current.offsetHeight;
+      try {
+        // Get card dimensions
+        const cardWidth = cardRef.current.offsetWidth;
+        const cardHeight = cardRef.current.offsetHeight;
 
-      // Determine canvas dimensions based on device
-      const isMobile = window.innerWidth < 768;
-      const canvasWidth = isMobile ? 720 : 1280;
-      const canvasHeight = isMobile ? 1280 : 720;
+        // Determine canvas dimensions based on device
+        const isMobile = window.innerWidth < 768;
+        const canvasWidth = isMobile ? 720 : 1280;
+        const canvasHeight = isMobile ? 1280 : 720;
 
-      // Create canvas
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      canvas.width = canvasWidth;
-      canvas.height = canvasHeight;
+        // Create canvas
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
 
-      // Add gradient background
-      const gradient = ctx!.createLinearGradient(0, 0, canvas.width, 0);
-      gradient.addColorStop(0, "#a78bfa");
-      gradient.addColorStop(1, "#f472b6");
-      ctx!.fillStyle = gradient;
-      ctx!.fillRect(0, 0, canvas.width, canvas.height);
+        // Add gradient background
+        const gradient = ctx!.createLinearGradient(0, 0, canvas.width, 0);
+        gradient.addColorStop(0, "#a78bfa");
+        gradient.addColorStop(1, "#f472b6");
+        ctx!.fillStyle = gradient;
+        ctx!.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Calculate scaling and centering
-      const scale = Math.min(
-        (canvasWidth * 0.8) / cardWidth, // Scale to 80% of canvas width
-        (canvasHeight * 0.8) / cardHeight // Scale to 80% of canvas height
-      );
-      const scaledWidth = cardWidth * scale;
-      const scaledHeight = cardHeight * scale;
-      const xOffset = (canvasWidth - scaledWidth) / 2; // Center horizontally
-      const yOffset = (canvasHeight - scaledHeight) / 2; // Center vertically
+        // Calculate scaling and centering
+        const scale = Math.min(
+          (canvasWidth * 0.8) / cardWidth,
+          (canvasHeight * 0.8) / cardHeight
+        );
+        const scaledWidth = cardWidth * scale;
+        const scaledHeight = cardHeight * scale;
+        const xOffset = (canvasWidth - scaledWidth) / 2;
+        const yOffset = (canvasHeight - scaledHeight) / 2;
 
-      // Serialize the card to an SVG
-      const clonedCard = cardRef.current.cloneNode(true) as HTMLElement;
-      const svgData = new XMLSerializer().serializeToString(clonedCard);
-      const encodedSvgData = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
-        svgData
-      )}`;
+        // Serialize the card to SVG
+        const clonedCard = cardRef.current.cloneNode(true) as HTMLElement;
 
-      // Load the SVG into an image
-      const img = new Image();
-      img.onload = () => {
-        ctx!.drawImage(img, xOffset, yOffset, scaledWidth, scaledHeight);
+        // Apply styles inline (this ensures styles are preserved)
+        const applyStylesInline = (node: HTMLElement) => {
+          const computedStyle: any = window.getComputedStyle(node);
+          for (let key of computedStyle) {
+            node.style[key as any] = computedStyle.getPropertyValue(key);
+          }
+          Array.from(node.children).forEach((child) =>
+            applyStylesInline(child as HTMLElement)
+          );
+        };
+        applyStylesInline(clonedCard);
 
-        // Trigger download
-        const link = document.createElement("a");
-        link.download = "notion-wrapped.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-      };
-      img.src = encodedSvgData;
+        const svgData = new XMLSerializer().serializeToString(clonedCard);
+        const encodedSvgData = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
+          svgData
+        )}`;
+
+        // Load the SVG into an image
+        const img = new Image();
+        img.crossOrigin = "anonymous"; // Handle cross-origin images if present
+        img.onload = () => {
+          ctx!.drawImage(img, xOffset, yOffset, scaledWidth, scaledHeight);
+
+          // Trigger download
+          const link = document.createElement("a");
+          link.download = "notion-wrapped.png";
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+        };
+        img.onerror = (error) => {
+          console.error("Failed to load image from SVG:", error);
+        };
+        img.src = encodedSvgData;
+      } catch (error) {
+        console.error("Error generating image:", error);
+      }
     }
   };
 
