@@ -30,35 +30,60 @@ export default function WrappedCard(props: {
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const handleDownload = () => {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
+  const handleDownload = async () => {
+    if (cardRef.current) {
+      // Get card dimensions
+      const cardWidth = cardRef.current.offsetWidth;
+      const cardHeight = cardRef.current.offsetHeight;
 
-    // Set canvas dimensions for landscape or portrait
-    const isMobile = window.innerWidth < 768;
-    canvas.width = isMobile ? 720 : 1280;
-    canvas.height = isMobile ? 1280 : 720;
+      // Determine canvas dimensions based on device
+      const isMobile = window.innerWidth < 768;
+      const canvasWidth = isMobile ? 720 : 1280;
+      const canvasHeight = isMobile ? 1280 : 720;
 
-    // Gradient background
-    const gradient = ctx!.createLinearGradient(0, 0, canvas.width, 0);
-    gradient.addColorStop(0, "#a78bfa");
-    gradient.addColorStop(1, "#f472b6");
-    ctx!.fillStyle = gradient;
-    ctx!.fillRect(0, 0, canvas.width, canvas.height);
+      // Create canvas
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = canvasWidth;
+      canvas.height = canvasHeight;
 
-    // Custom styling for the card content
-    ctx!.fillStyle = "#fff";
-    ctx!.font = "bold 36px Arial";
-    ctx!.textAlign = "center";
-    ctx!.fillText("Notion Wrapped", canvas.width / 2, canvas.height / 4);
+      // Add gradient background
+      const gradient = ctx!.createLinearGradient(0, 0, canvas.width, 0);
+      gradient.addColorStop(0, "#a78bfa");
+      gradient.addColorStop(1, "#f472b6");
+      ctx!.fillStyle = gradient;
+      ctx!.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Add more content programmatically if needed...
+      // Calculate scaling and centering
+      const scale = Math.min(
+        (canvasWidth * 0.8) / cardWidth, // Scale to 80% of canvas width
+        (canvasHeight * 0.8) / cardHeight // Scale to 80% of canvas height
+      );
+      const scaledWidth = cardWidth * scale;
+      const scaledHeight = cardHeight * scale;
+      const xOffset = (canvasWidth - scaledWidth) / 2; // Center horizontally
+      const yOffset = (canvasHeight - scaledHeight) / 2; // Center vertically
 
-    // Download the canvas as an image
-    const link = document.createElement("a");
-    link.download = "notion-wrapped.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
+      // Serialize the card to an SVG
+      const clonedCard = cardRef.current.cloneNode(true) as HTMLElement;
+      const svgData = new XMLSerializer().serializeToString(clonedCard);
+      const encodedSvgData = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
+        svgData
+      )}`;
+
+      // Load the SVG into an image
+      const img = new Image();
+      img.onload = () => {
+        ctx!.drawImage(img, xOffset, yOffset, scaledWidth, scaledHeight);
+
+        // Trigger download
+        const link = document.createElement("a");
+        link.download = "notion-wrapped.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      };
+      img.src = encodedSvgData;
+    }
   };
 
   const handleShare = async () => {
@@ -344,10 +369,4 @@ export default function WrappedCard(props: {
       ) : null}
     </>
   );
-}
-function createCanvas(
-  width: number,
-  height: number
-): { canvas: any; ctx: any } {
-  throw new Error("Function not implemented.");
 }
