@@ -59,16 +59,8 @@ export default function WrappedCard(props: {
         hiddenContainer.appendChild(clonedCard);
         document.body.appendChild(hiddenContainer);
 
-        // Wait for fonts to load
-        await document.fonts.ready;
-
         // Generate the image
-        const dataUrl = await toPng(hiddenContainer, {
-          quality: 1,
-          style: {
-            fontFamily: window.getComputedStyle(document.body).fontFamily,
-          },
-        });
+        const dataUrl = await toPng(hiddenContainer, { cacheBust: true });
 
         // Remove the hidden container
         document.body.removeChild(hiddenContainer);
