@@ -33,17 +33,60 @@ export default function WrappedCard(props: {
 
   const handleDownload = async () => {
     if (cardRef.current) {
-      try {
-        // Generate the image
-        const dataUrl = await toPng(cardRef.current, { cacheBust: true });
-        // Create a link element
-        const link = document.createElement("a");
-        link.href = dataUrl;
-        link.download = "notion-wrapped.png";
-        // Trigger the download
-        link.click();
-      } catch (error) {
-        console.error("Failed to generate image:", error);
+      // Determine aspect ratio (portrait for mobile, landscape for desktop)
+      const isMobile = window.innerWidth <= 768;
+
+      if (isMobile) {
+        try {
+          // Create a hidden container
+          const hiddenContainer = document.createElement("div");
+          hiddenContainer.style.position = "fixed";
+          hiddenContainer.style.left = "-9999px";
+          hiddenContainer.style.width = `720px`;
+          hiddenContainer.style.height = `1280px`;
+          hiddenContainer.style.display = "flex";
+          hiddenContainer.style.alignItems = "center";
+          hiddenContainer.style.justifyContent = "center";
+          hiddenContainer.style.background =
+            "linear-gradient(to right, #a78bfa, #f472b6)"; // Gradient background
+          hiddenContainer.style.borderRadius = "16px"; // Optional rounded corners
+          hiddenContainer.style.overflow = "hidden";
+
+          // Clone the card and append it to the hidden container
+          const clonedCard = cardRef.current.cloneNode(true) as HTMLElement;
+          clonedCard.style.transform = "scale(1)"; // Adjust scaling as needed
+          clonedCard.style.transformOrigin = "center";
+          clonedCard.style.width = "90%"; // Scale to fit the container
+          clonedCard.style.height = "auto"; // Maintain aspect ratio
+          clonedCard.style.margin = "0 auto";
+          hiddenContainer.appendChild(clonedCard);
+
+          document.body.appendChild(hiddenContainer);
+
+          // Generate the image
+          const dataUrl = await toPng(hiddenContainer, {
+            cacheBust: true,
+          });
+
+          // Create a link for download
+          const link = document.createElement("a");
+          link.href = dataUrl;
+          link.download = "notion-wrapped.png";
+          link.click();
+        } catch (error) {}
+      } else {
+        try {
+          // Generate the image
+          const dataUrl = await toPng(cardRef.current, { cacheBust: true });
+          // Create a link element
+          const link = document.createElement("a");
+          link.href = dataUrl;
+          link.download = "notion-wrapped.png";
+          // Trigger the download
+          link.click();
+        } catch (error) {
+          console.error("Failed to generate image:", error);
+        }
       }
     }
   };
@@ -310,7 +353,7 @@ export default function WrappedCard(props: {
           </BentoGrid>
         </motion.div>
       </Card>
-      {!props.isLanding ? (
+      {props.isLanding ? (
         <div className="flex gap-2 justify-center mt-8">
           <Button
             onClick={handleShare}
