@@ -34,33 +34,35 @@ export default function WrappedCard(props: {
   const handleDownload = async () => {
     if (cardRef.current) {
       try {
-        // Create a hidden container for the download layout
+        // Create a hidden container
         const hiddenContainer = document.createElement("div");
-        hiddenContainer.style.position = "fixed";
-        hiddenContainer.style.left = "-9999px";
-        hiddenContainer.style.width = "1280px"; // Fixed desktop-like width
-        hiddenContainer.style.height = "720px"; // Fixed desktop-like height
-        hiddenContainer.style.display = "grid";
-        hiddenContainer.style.gridTemplateColumns = "repeat(3, 1fr)"; // Bento grid layout
-        hiddenContainer.style.gridGap = "16px"; // Adjust spacing
-        hiddenContainer.style.padding = "16px";
+        hiddenContainer.style.position = "absolute";
+        hiddenContainer.style.top = "0";
+        hiddenContainer.style.left = "0";
+        hiddenContainer.style.width = "1280px"; // Landscape width
+        hiddenContainer.style.height = "720px"; // Landscape height
+        hiddenContainer.style.visibility = "hidden"; // Keep it hidden but renderable
         hiddenContainer.style.background =
           "linear-gradient(to right, #a78bfa, #f472b6)"; // Gradient background
         hiddenContainer.style.borderRadius = "16px";
-        hiddenContainer.style.boxSizing = "border-box";
 
-        // Clone the card and append it to the hidden container
+        // Clone the card and append to the hidden container
         const clonedCard = cardRef.current.cloneNode(true) as HTMLElement;
-        clonedCard.style.gridColumn = "span 1"; // Force each item into grid cells
-        clonedCard.style.padding = "16px";
-        clonedCard.style.background = "#ffffff"; // Optional card background
-        clonedCard.style.borderRadius = "8px";
-
+        clonedCard.style.transform = "scale(1.2)"; // Adjust scale if needed
         hiddenContainer.appendChild(clonedCard);
         document.body.appendChild(hiddenContainer);
 
+        // Wait for fonts and styles to load
+        await document.fonts.ready;
+
         // Generate the image
-        const dataUrl = await toPng(hiddenContainer, { cacheBust: true });
+        const dataUrl = await toPng(hiddenContainer, {
+          cacheBust: true,
+          quality: 1,
+          style: {
+            fontFamily: window.getComputedStyle(document.body).fontFamily,
+          },
+        });
 
         // Remove the hidden container
         document.body.removeChild(hiddenContainer);
@@ -338,7 +340,7 @@ export default function WrappedCard(props: {
           </BentoGrid>
         </motion.div>
       </Card>
-      {!props.isLanding ? (
+      {props.isLanding ? (
         <div className="flex gap-2 justify-center mt-8">
           <Button
             onClick={handleShare}
