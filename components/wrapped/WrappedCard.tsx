@@ -33,60 +33,53 @@ export default function WrappedCard(props: {
 
   const handleDownload = async () => {
     if (cardRef.current) {
-      // Determine aspect ratio (portrait for mobile, landscape for desktop)
-      const isMobile = window.innerWidth <= 768;
+      try {
+        // Create a hidden container for the download layout
+        const hiddenContainer = document.createElement("div");
+        hiddenContainer.style.position = "fixed";
+        hiddenContainer.style.left = "-9999px";
+        hiddenContainer.style.width = "1280px"; // Fixed desktop-like width
+        hiddenContainer.style.height = "720px"; // Fixed desktop-like height
+        hiddenContainer.style.display = "grid";
+        hiddenContainer.style.gridTemplateColumns = "repeat(3, 1fr)"; // Bento grid layout
+        hiddenContainer.style.gridGap = "16px"; // Adjust spacing
+        hiddenContainer.style.padding = "16px";
+        hiddenContainer.style.background =
+          "linear-gradient(to right, #a78bfa, #f472b6)"; // Gradient background
+        hiddenContainer.style.borderRadius = "16px";
+        hiddenContainer.style.boxSizing = "border-box";
 
-      if (isMobile) {
-        try {
-          // Create a hidden container
-          const hiddenContainer = document.createElement("div");
-          hiddenContainer.style.position = "fixed";
-          hiddenContainer.style.left = "-9999px";
-          hiddenContainer.style.width = `720px`;
-          hiddenContainer.style.height = `1280px`;
-          hiddenContainer.style.display = "flex";
-          hiddenContainer.style.alignItems = "center";
-          hiddenContainer.style.justifyContent = "center";
-          hiddenContainer.style.background =
-            "linear-gradient(to right, #a78bfa, #f472b6)"; // Gradient background
-          hiddenContainer.style.borderRadius = "16px"; // Optional rounded corners
-          hiddenContainer.style.overflow = "hidden";
+        // Clone the card and append it to the hidden container
+        const clonedCard = cardRef.current.cloneNode(true) as HTMLElement;
+        clonedCard.style.gridColumn = "span 1"; // Force each item into grid cells
+        clonedCard.style.padding = "16px";
+        clonedCard.style.background = "#ffffff"; // Optional card background
+        clonedCard.style.borderRadius = "8px";
 
-          // Clone the card and append it to the hidden container
-          const clonedCard = cardRef.current.cloneNode(true) as HTMLElement;
-          clonedCard.style.transform = "scale(1)"; // Adjust scaling as needed
-          clonedCard.style.transformOrigin = "center";
-          clonedCard.style.width = "90%"; // Scale to fit the container
-          clonedCard.style.height = "auto"; // Maintain aspect ratio
-          clonedCard.style.margin = "0 auto";
-          hiddenContainer.appendChild(clonedCard);
+        hiddenContainer.appendChild(clonedCard);
+        document.body.appendChild(hiddenContainer);
 
-          document.body.appendChild(hiddenContainer);
+        // Wait for fonts to load
+        await document.fonts.ready;
 
-          // Generate the image
-          const dataUrl = await toPng(hiddenContainer, {
-            cacheBust: true,
-          });
+        // Generate the image
+        const dataUrl = await toPng(hiddenContainer, {
+          quality: 1,
+          style: {
+            fontFamily: window.getComputedStyle(document.body).fontFamily,
+          },
+        });
 
-          // Create a link for download
-          const link = document.createElement("a");
-          link.href = dataUrl;
-          link.download = "notion-wrapped.png";
-          link.click();
-        } catch (error) {}
-      } else {
-        try {
-          // Generate the image
-          const dataUrl = await toPng(cardRef.current, { cacheBust: true });
-          // Create a link element
-          const link = document.createElement("a");
-          link.href = dataUrl;
-          link.download = "notion-wrapped.png";
-          // Trigger the download
-          link.click();
-        } catch (error) {
-          console.error("Failed to generate image:", error);
-        }
+        // Remove the hidden container
+        document.body.removeChild(hiddenContainer);
+
+        // Create a link for download
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = "notion-wrapped.png";
+        link.click();
+      } catch (error) {
+        console.error("Failed to generate image:", error);
       }
     }
   };
@@ -353,7 +346,7 @@ export default function WrappedCard(props: {
           </BentoGrid>
         </motion.div>
       </Card>
-      {props.isLanding ? (
+      {!props.isLanding ? (
         <div className="flex gap-2 justify-center mt-8">
           <Button
             onClick={handleShare}
