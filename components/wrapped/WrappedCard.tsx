@@ -9,7 +9,7 @@ import { useRef } from "react";
 import React from "react";
 import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
 import { Avatar, AvatarImage } from "../ui/avatar";
-import { toCanvas } from "html-to-image";
+import { toCanvas, toPng } from "html-to-image";
 
 export type NotionData = {
   streak: number;
@@ -32,57 +32,73 @@ export default function WrappedCard(props: {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleDownload = async () => {
+    const isMobile = window.innerWidth <= 768;
     if (cardRef.current) {
-      try {
-        // Clone the card element
-        const clonedCard = cardRef.current.cloneNode(true);
-        const container = document.createElement("div");
+      if (isMobile) {
+        try {
+          // Clone the card element
+          const clonedCard = cardRef.current.cloneNode(true);
+          const container = document.createElement("div");
 
-        // Calculate the scale factor
-        const desiredWidth = 1080; // Desired width in pixels
-        const desiredHeight = 1920; // Desired height in pixels
-        const currentWidth = cardRef.current.offsetWidth;
-        const currentHeight = cardRef.current.offsetHeight;
+          // Calculate the scale factor
+          const desiredWidth = 1080; // Desired width in pixels
+          const desiredHeight = 1920; // Desired height in pixels
+          const currentWidth = cardRef.current.offsetWidth;
+          const currentHeight = cardRef.current.offsetHeight;
 
-        const scale = Math.min(
-          desiredWidth / currentWidth,
-          desiredHeight / currentHeight
-        );
+          const scale = Math.min(
+            desiredWidth / currentWidth,
+            desiredHeight / currentHeight
+          );
 
-        // Style the container to fit the desired dimensions
-        container.style.width = `${desiredWidth}px`;
-        container.style.height = `${desiredHeight}px`;
-        container.style.display = "flex";
-        container.style.justifyContent = "center";
-        container.style.alignItems = "center";
-        container.style.background =
-          "linear-gradient(to right, #a78bfa, #f472b6)";
-        container.style.borderRadius = "16px";
-        container.style.padding = "16px";
-        container.style.transform = `scale(${scale})`;
-        container.appendChild(clonedCard);
+          // Style the container to fit the desired dimensions
+          container.style.width = `${desiredWidth}px`;
+          container.style.height = `${desiredHeight}px`;
+          container.style.display = "flex";
+          container.style.justifyContent = "center";
+          container.style.alignItems = "center";
+          container.style.background = "#191919";
+          container.style.borderRadius = "16px";
+          container.style.padding = "16px";
+          container.style.transform = `scale(${scale})`;
+          container.style.visibility = "hidden";
+          container.appendChild(clonedCard);
 
-        // Append to the DOM temporarily
-        document.body.appendChild(container);
+          // Append to the DOM temporarily
+          document.body.appendChild(container);
 
-        // Render the container to a canvas
-        const canvas = await toCanvas(container, {
-          cacheBust: true,
-        });
+          // Render the container to a canvas
+          const canvas = await toCanvas(container, {
+            cacheBust: true,
+          });
 
-        // Remove the temporary container
-        document.body.removeChild(container);
+          // Remove the temporary container
+          document.body.removeChild(container);
 
-        // Convert the canvas to an image
-        const dataUrl = canvas.toDataURL("image/png");
+          // Convert the canvas to an image
+          const dataUrl = canvas.toDataURL("image/png");
 
-        // Create a link for downloading
-        const link = document.createElement("a");
-        link.href = dataUrl;
-        link.download = "notion-wrapped-scaled.png";
-        link.click();
-      } catch (error) {
-        console.error("Failed to generate image:", error);
+          // Create a link for downloading
+          const link = document.createElement("a");
+          link.href = dataUrl;
+          link.download = "notion-wrapped-scaled.png";
+          link.click();
+        } catch (error) {
+          console.error("Failed to generate image:", error);
+        }
+      } else {
+        try {
+          // Generate the image
+          const dataUrl = await toPng(cardRef.current, { cacheBust: true });
+          // Create a link element
+          const link = document.createElement("a");
+          link.href = dataUrl;
+          link.download = "notion-wrapped.png";
+          // Trigger the download
+          link.click();
+        } catch (error) {
+          console.error("Failed to generate image:", error);
+        }
       }
     }
   };
