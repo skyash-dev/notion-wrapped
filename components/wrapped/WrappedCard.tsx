@@ -61,7 +61,6 @@ export default function WrappedCard(props: {
           container.style.borderRadius = "16px";
           container.style.padding = "16px";
           container.style.transform = `scale(${scale})`;
-          container.style.visibility = "hidden";
           container.appendChild(clonedCard);
 
           // Append to the DOM temporarily
@@ -81,7 +80,7 @@ export default function WrappedCard(props: {
           // Create a link for downloading
           const link = document.createElement("a");
           link.href = dataUrl;
-          link.download = "notion-wrapped-scaled.png";
+          link.download = "notion-wrapped.png";
           link.click();
         } catch (error) {
           console.error("Failed to generate image:", error);
