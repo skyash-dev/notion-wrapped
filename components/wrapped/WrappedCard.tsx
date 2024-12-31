@@ -9,6 +9,7 @@ import { useRef } from "react";
 import React from "react";
 import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
 import { Avatar, AvatarImage } from "../ui/avatar";
+import { toPng } from "html-to-image";
 
 export type NotionData = {
   streak: number;
@@ -31,78 +32,36 @@ export default function WrappedCard(props: {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleDownload = async () => {
-    if (cardRef.current) {
+    const iframe = document.createElement("iframe");
+    iframe.style.position = "absolute";
+    iframe.style.left = "-9999px"; // Move offscreen
+    iframe.style.width = "1280px";
+    iframe.style.height = "720px";
+    document.body.appendChild(iframe);
+
+    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+
+    if (iframeDoc && cardRef.current) {
+      // Clone card content into iframe
+      const clonedCard = cardRef.current.cloneNode(true) as HTMLElement;
+      iframeDoc.body.appendChild(clonedCard);
+
+      await new Promise((resolve) => setTimeout(resolve, 100)); // Wait for layout
+
       try {
-        // Get card dimensions
-        const cardWidth = cardRef.current.offsetWidth;
-        const cardHeight = cardRef.current.offsetHeight;
+        // Generate image using the iframe content
+        const dataUrl = await toPng(clonedCard, { cacheBust: true });
 
-        // Determine canvas dimensions based on device
-        const isMobile = window.innerWidth < 768;
-        const canvasWidth = isMobile ? 720 : 1280;
-        const canvasHeight = isMobile ? 1280 : 720;
+        // Clean up iframe
+        document.body.removeChild(iframe);
 
-        // Create canvas
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        canvas.width = canvasWidth;
-        canvas.height = canvasHeight;
-
-        // Add gradient background
-        const gradient = ctx!.createLinearGradient(0, 0, canvas.width, 0);
-        gradient.addColorStop(0, "#a78bfa");
-        gradient.addColorStop(1, "#f472b6");
-        ctx!.fillStyle = gradient;
-        ctx!.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Calculate scaling and centering
-        const scale = Math.min(
-          (canvasWidth * 0.8) / cardWidth,
-          (canvasHeight * 0.8) / cardHeight
-        );
-        const scaledWidth = cardWidth * scale;
-        const scaledHeight = cardHeight * scale;
-        const xOffset = (canvasWidth - scaledWidth) / 2;
-        const yOffset = (canvasHeight - scaledHeight) / 2;
-
-        // Serialize the card to SVG
-        const clonedCard = cardRef.current.cloneNode(true) as HTMLElement;
-
-        // Apply styles inline (this ensures styles are preserved)
-        const applyStylesInline = (node: HTMLElement) => {
-          const computedStyle: any = window.getComputedStyle(node);
-          for (let key of computedStyle) {
-            node.style[key as any] = computedStyle.getPropertyValue(key);
-          }
-          Array.from(node.children).forEach((child) =>
-            applyStylesInline(child as HTMLElement)
-          );
-        };
-        applyStylesInline(clonedCard);
-
-        const svgData = new XMLSerializer().serializeToString(clonedCard);
-        const encodedSvgData = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
-          svgData
-        )}`;
-
-        // Load the SVG into an image
-        const img = new Image();
-        img.crossOrigin = "anonymous"; // Handle cross-origin images if present
-        img.onload = () => {
-          ctx!.drawImage(img, xOffset, yOffset, scaledWidth, scaledHeight);
-
-          // Trigger download
-          const link = document.createElement("a");
-          link.download = "notion-wrapped.png";
-          link.href = canvas.toDataURL("image/png");
-          link.click();
-        };
-        img.onerror = (error) => {
-          console.error("Failed to load image from SVG:", error);
-        };
-        img.src = encodedSvgData;
+        // Trigger download
+        const link = document.createElement("a");
+        link.download = "notion-wrapped.png";
+        link.href = dataUrl;
+        link.click();
       } catch (error) {
-        console.error("Error generating image:", error);
+        console.error("Failed to generate image:", error);
       }
     }
   };
@@ -369,7 +328,7 @@ export default function WrappedCard(props: {
           </BentoGrid>
         </motion.div>
       </Card>
-      {props.isLanding ? (
+      {!props.isLanding ? (
         <div className="flex gap-2 justify-center mt-8">
           <Button
             onClick={handleShare}
