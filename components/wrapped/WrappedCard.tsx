@@ -9,7 +9,7 @@ import { useRef } from "react";
 import React from "react";
 import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
 import { Avatar, AvatarImage } from "../ui/avatar";
-import { toPng } from "html-to-image";
+import { toCanvas } from "html-to-image";
 
 export type NotionData = {
   streak: number;
@@ -32,33 +32,40 @@ export default function WrappedCard(props: {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleDownload = async () => {
-    const iframe = document.createElement("iframe");
-    iframe.style.position = "absolute";
-    iframe.style.left = "-9999px"; // Move offscreen
-    iframe.style.width = "1280px";
-    iframe.style.height = "720px";
-    document.body.appendChild(iframe);
-
-    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-
-    if (iframeDoc && cardRef.current) {
-      // Clone card content into iframe
-      const clonedCard = cardRef.current.cloneNode(true) as HTMLElement;
-      iframeDoc.body.appendChild(clonedCard);
-
-      await new Promise((resolve) => setTimeout(resolve, 100)); // Wait for layout
-
+    if (cardRef.current) {
       try {
-        // Generate image using the iframe content
-        const dataUrl = await toPng(clonedCard, { cacheBust: true });
+        // Ensure styles are captured by cloning the node
+        const clonedCard = cardRef.current.cloneNode(true);
+        const container = document.createElement("div");
 
-        // Clean up iframe
-        document.body.removeChild(iframe);
+        // Add styles for the gradient background and center alignment
+        container.style.width = "720px"; // Adjust for portrait or landscape
+        container.style.height = "1280px"; // Adjust for portrait or landscape
+        container.style.display = "flex";
+        container.style.justifyContent = "center";
+        container.style.alignItems = "center";
+        container.style.background =
+          "linear-gradient(to right, #a78bfa, #f472b6)"; // Gradient background
+        container.style.borderRadius = "16px"; // Optional rounded corners
+        container.style.padding = "16px"; // Padding around the card
+        container.appendChild(clonedCard);
 
-        // Trigger download
+        // Append to the DOM temporarily for rendering
+        document.body.appendChild(container);
+
+        // Render the container to a canvas
+        const canvas = await toCanvas(container, { cacheBust: true });
+
+        // Remove the container after rendering
+        document.body.removeChild(container);
+
+        // Convert the canvas to an image
+        const dataUrl = canvas.toDataURL("image/png");
+
+        // Create a link for download
         const link = document.createElement("a");
-        link.download = "notion-wrapped.png";
         link.href = dataUrl;
+        link.download = "notion-wrapped.png";
         link.click();
       } catch (error) {
         console.error("Failed to generate image:", error);
