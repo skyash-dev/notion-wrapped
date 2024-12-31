@@ -34,24 +34,35 @@ export default function WrappedCard(props: {
   const handleDownload = async () => {
     if (cardRef.current) {
       try {
-        // Ensure styles are captured by cloning the node
+        // Clone the card element
         const clonedCard = cardRef.current.cloneNode(true);
         const container = document.createElement("div");
 
-        // Add styles for the gradient background and center alignment
-        container.style.width = "720px"; // Adjust for portrait or landscape
-        container.style.height = "1280px"; // Adjust for portrait or landscape
+        // Calculate the scale factor
+        const desiredWidth = 1080; // Desired width in pixels
+        const desiredHeight = 1920; // Desired height in pixels
+        const currentWidth = cardRef.current.offsetWidth;
+        const currentHeight = cardRef.current.offsetHeight;
+
+        const scale = Math.min(
+          desiredWidth / currentWidth,
+          desiredHeight / currentHeight
+        );
+
+        // Style the container to fit the desired dimensions
+        container.style.width = `${desiredWidth}px`;
+        container.style.height = `${desiredHeight}px`;
         container.style.display = "flex";
         container.style.justifyContent = "center";
         container.style.alignItems = "center";
         container.style.background =
-          "linear-gradient(to right, #a78bfa, #f472b6)"; // Gradient background
-        container.style.borderRadius = "16px"; // Optional rounded corners
-        container.style.padding = "16px"; // Padding around the card
-
+          "linear-gradient(to right, #a78bfa, #f472b6)";
+        container.style.borderRadius = "16px";
+        container.style.padding = "16px";
+        container.style.transform = `scale(${scale})`;
         container.appendChild(clonedCard);
 
-        // Append to the DOM temporarily for rendering
+        // Append to the DOM temporarily
         document.body.appendChild(container);
 
         // Render the container to a canvas
@@ -59,16 +70,16 @@ export default function WrappedCard(props: {
           cacheBust: true,
         });
 
-        // Remove the container after rendering
+        // Remove the temporary container
         document.body.removeChild(container);
 
         // Convert the canvas to an image
         const dataUrl = canvas.toDataURL("image/png");
 
-        // Create a link for download
+        // Create a link for downloading
         const link = document.createElement("a");
         link.href = dataUrl;
-        link.download = "notion-wrapped.png";
+        link.download = "notion-wrapped-scaled.png";
         link.click();
       } catch (error) {
         console.error("Failed to generate image:", error);
