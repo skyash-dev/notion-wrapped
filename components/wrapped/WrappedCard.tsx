@@ -48,13 +48,16 @@ export default function WrappedCard(props: {
           "linear-gradient(to right, #a78bfa, #f472b6)"; // Gradient background
         container.style.borderRadius = "16px"; // Optional rounded corners
         container.style.padding = "16px"; // Padding around the card
+
         container.appendChild(clonedCard);
 
         // Append to the DOM temporarily for rendering
         document.body.appendChild(container);
 
         // Render the container to a canvas
-        const canvas = await toCanvas(container, { cacheBust: true });
+        const canvas = await toCanvas(container, {
+          cacheBust: true,
+        });
 
         // Remove the container after rendering
         document.body.removeChild(container);
